@@ -43,50 +43,6 @@ class ParticleBW2007(Particle):
         barrier_factor = q * Bprime(1, q, q0, d=3.0)
         return BWamp * tf.cast(barrier_factor, BWamp.dtype)
 
-from tf_pwa.amp.interpolation import InterpolationParticle
-@register_particle("interp_hist_with_exp_factor")
-class InterpHistExp(InterpolationParticle):
-    def init_params(self):
-        self.a = self.add_var("a")
-        self.b = self.add_var("b")
-        self.point_value = self.add_var(
-            "point",
-            is_complex=True,
-            shape=(self.n_points(),),
-            polar=self.polar,
-        )
-        if self.fix_idx is not None:
-            self.point_value.set_fix_idx(fix_idx=self.fix_idx, fix_vals=1.0)
-
-    def interp(self, m):
-        a = tf.abs(self.a())
-        b = self.b()
-        p = self.point_value()
-        ones = tf.ones_like(m)
-        zeros = tf.zeros_like(m)
-
-        def add_f(x, bl, br):
-            return tf.where((x > bl) & (x <= br), ones, zeros)
-
-        x_bin = tf.stack(
-            [
-                add_f(
-                    m,
-                    (self.points[i] + self.points[i + 1]) / 2,
-                    (self.points[i + 1] + self.points[i + 2]) / 2,
-                )
-                for i in range(self.interp_N - 2)
-            ],
-            axis=-1,
-        )
-        p_r = tf.math.real(p)
-        p_i = tf.math.imag(p)
-        x_bin = tf.stop_gradient(x_bin)
-        ret_r = tf.reduce_sum(x_bin * p_r, axis=-1)
-        ret_i = tf.reduce_sum(x_bin * p_i, axis=-1)
-        return tf.complex(b*tf.exp(-a*(m*m-4.0272863761))+1, zeros) * tf.complex(ret_r, ret_i) # 2.00681**2
-
-
 
 def json_print(dic):
     """print parameters as json"""
@@ -165,7 +121,7 @@ def fit(config, init_params="", method="BFGS", loop=1, maxiter=500):
 
 def write_some_results(config, fit_result, save_root=False):
     # plot partial wave distribution
-    config.plot_partial_wave(fit_result, plot_pull=True, save_root=save_root)
+    config.plot_partial_wave(fit_result, plot_pull=True, save_root=save_root, smooth=False)
 
     # calculate fit fractions
     phsp_noeff = config.get_phsp_noeff()
@@ -195,7 +151,7 @@ def write_some_results_combine(config, fit_result, save_root=False):
 
     for i, c in enumerate(config.configs):
         c.plot_partial_wave(
-            fit_result, prefix="figure/s{}_".format(i), save_root=save_root
+            fit_result, prefix="figure/".format(i), save_root=save_root, smooth=False
         )
 
     for it, config_i in enumerate(config.configs):

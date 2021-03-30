@@ -12,7 +12,7 @@ class InterpolationParticle(Particle):
         self.max_m = None
         self.min_m = None
         self.interp_N = None
-        self.polar = True
+        self.polar = False
         self.fix_idx = -1
         self.with_bound = False
         super(InterpolationParticle, self).__init__(*args, **kwargs)
