@@ -13,18 +13,79 @@ matplotlib.use("agg")
 import tensorflow as tf
 
 # examples of custom particle model
-from tf_pwa.amp import simple_resonance
+from tf_pwa.amp import simple_resonance, register_particle, Particle
 from tf_pwa.config_loader import ConfigLoader, MultiConfig
 from tf_pwa.experimental import extra_amp, extra_data
 from tf_pwa.utils import error_print, tuple_table
 
 
-@simple_resonance("New", params=["alpha", "beta"])
-def New_Particle(m, alpha, beta=0):
-    """example Particle model define, can be used in config.yml as `model: New`"""
-    zeros = tf.zeros_like(m)
-    r = -tf.complex(alpha, beta) * tf.complex(m, zeros)
-    return tf.exp(r)
+@register_particle("exp2")
+class ParticleExp(Particle):
+    def init_params(self):
+        self.a = self.add_var("a")
+
+    def get_amp(self, data, _data_c=None, **kwargs):
+        mass = data["m"]
+        zeros = tf.zeros_like(mass)
+        a = tf.abs(self.a())
+        return tf.complex(tf.exp(-a * (mass * mass)), zeros) # - 4.0272863761
+
+# D0 1.86483 pi0 0.1349768
+from tf_pwa.breit_wigner import BWR, Bprime
+@register_particle("BW2007")
+class ParticleBW2007(Particle):
+    def get_amp(self, data, data_c=None, **kwargs):
+        mass = self.get_mass()
+        width = self.get_width()
+        q = data_c["|q|"]
+        q0 = 0.042580705388 # get_p(2.00685, 1.86483, 0.1349768)
+        BWamp = BWR(data["m"], mass, width, q, q0, L=1, d=3.0)
+        barrier_factor = q * Bprime(1, q, q0, d=3.0)
+        return BWamp * tf.cast(barrier_factor, BWamp.dtype)
+
+from tf_pwa.amp.interpolation import InterpolationParticle
+@register_particle("interp_hist_with_exp_factor")
+class InterpHistExp(InterpolationParticle):
+    def init_params(self):
+        self.a = self.add_var("a")
+        self.b = self.add_var("b")
+        self.point_value = self.add_var(
+            "point",
+            is_complex=True,
+            shape=(self.n_points(),),
+            polar=self.polar,
+        )
+        if self.fix_idx is not None:
+            self.point_value.set_fix_idx(fix_idx=self.fix_idx, fix_vals=1.0)
+
+    def interp(self, m):
+        a = tf.abs(self.a())
+        b = self.b()
+        p = self.point_value()
+        ones = tf.ones_like(m)
+        zeros = tf.zeros_like(m)
+
+        def add_f(x, bl, br):
+            return tf.where((x > bl) & (x <= br), ones, zeros)
+
+        x_bin = tf.stack(
+            [
+                add_f(
+                    m,
+                    (self.points[i] + self.points[i + 1]) / 2,
+                    (self.points[i + 1] + self.points[i + 2]) / 2,
+                )
+                for i in range(self.interp_N - 2)
+            ],
+            axis=-1,
+        )
+        p_r = tf.math.real(p)
+        p_i = tf.math.imag(p)
+        x_bin = tf.stop_gradient(x_bin)
+        ret_r = tf.reduce_sum(x_bin * p_r, axis=-1)
+        ret_i = tf.reduce_sum(x_bin * p_i, axis=-1)
+        return tf.complex(b*tf.exp(-a*(m*m-4.0272863761))+1, zeros) * tf.complex(ret_r, ret_i) # 2.00681**2
+
 
 
 def json_print(dic):
@@ -197,7 +258,7 @@ def main():
     )
     parser.add_argument("-r", "--save_root", default=False, dest="save_root")
     parser.add_argument(
-        "--total-same", action="store_true", default=False, dest="total_same"
+        "--total-same", action="store_true", default=True, dest="total_same"
     )
     results = parser.parse_args()
     if results.has_gpu:
