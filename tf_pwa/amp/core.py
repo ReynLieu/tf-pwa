@@ -484,7 +484,7 @@ class HelicityDecay(AmpDecay):
         aligned=False,
         allow_cc=True,
         ls_list=None,
-        barrier_factor_norm=False,
+        barrier_factor_norm=True,
         **kwargs
     ):
         super(HelicityDecay, self).__init__(*args, **kwargs)

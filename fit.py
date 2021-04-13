@@ -38,7 +38,7 @@ class ParticleExp(Particle):
         mass = data["m"]
         zeros = tf.zeros_like(mass)
         a = tf.abs(self.a())
-        return tf.complex(tf.exp(-a * mass * mass), zeros)
+        return tf.complex(tf.exp(-a * (mass * mass - 5.5)), zeros)
 
 @regist_particle("KmatrixDK")
 class ParticleKmatrixDK(Particle):
@@ -174,8 +174,10 @@ def fit(config, init_params="", method="BFGS", loop=1, maxiter=500):
 
     # load data
     all_data = config.get_all_data()
-
+    amp = config.get_amplitude()
     fit_results = []
+    if maxiter is 0:
+        amp.cached_fun = amp.decay_group.sum_amp # turn off use_tf_function
     for i in range(loop):
         # set initial parameters if have
         if config.set_params(init_params):
@@ -184,6 +186,7 @@ def fit(config, init_params="", method="BFGS", loop=1, maxiter=500):
             print("\nusing RANDOM parameters", flush=True)
         # try to fit
         try:
+            #amp.vm.rp2xy_all()
             fit_result = config.fit(
                 batch=65000, method=method, maxiter=maxiter
             )
