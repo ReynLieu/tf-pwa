@@ -60,7 +60,7 @@ class ParticleKmatrixDK(Particle):
 
         self.mdaughtera1 = 1.86483 # D0
         self.mdaughtera2 = 0.493677 # Kp
-        self.mdaughterb1 = 2.00696 # D*0
+        self.mdaughterb1 = 2.00685 # D*0
         self.mdaughterb2 = self.mdaughtera2 # Kp
         self.d = 3.0
 
