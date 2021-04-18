@@ -187,6 +187,7 @@ def fit(config, init_params="", method="BFGS", loop=1, maxiter=500):
         # try to fit
         try:
             #amp.vm.rp2xy_all()
+            amp.vm.std_polar_all()
             fit_result = config.fit(
                 batch=65000, method=method, maxiter=maxiter
             )
