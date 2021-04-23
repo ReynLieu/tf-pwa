@@ -1,178 +1,271 @@
-# configuration files
-# using YAML format,see more: https://yaml.org/
-# required PyYAML module
-# this file use indentation to indicate hierarchy
-
-# data entry is the data file name list used for fit
+##### config.yml
 data:
-  # 4-momentum order of final particles in dat files [option]
-  # the `finals` in `particle` will be used by default.
-  # it is necessary when dat files has momentum out of final particles
-  dat_order: [B, C, D]
-  # basic data files, every line is `E px py pz` as 4-momentum of a particle,
-  # and every m lines group as m final particls
-  data: ["data/data4600_new.dat"]
-  # data weight file, each line for a weight
-  # data_weight: ["data/data_weight.dat"]
-  # phase space data for normalize amplitude
-  phsp: ["data/PHSP4600_new.dat"]
-  # phase space weight file, each line for a weight
-  # phsp_weight: ["data/phsp_weight.dat"]
-  # phase space without efficiencies, used for calculating fit fraction.
-  # phsp_noeff: ["data/PHSP4600_noeff.dat"]
-  # much more phase space, used for plotting
-  # phsp_plot: ["data/PHSP4600_plot.dat"]
-  # optional weight background data, need bg_weight
-  bg: ["data/bg4600_new.dat"]
-  # background weight
-  bg_weight: 0.731
-  # inject MC in data
-  # inmc: ["data/inMC.dat"]
-  # inject_ratio: 0.01
-  # float_inmc_ratio_in_pdf: False
-  # whether boost data to center mass frame first
-  # center_mass: True
-  # cached data file
-  # cached_data: "data/all_data.npy"
-  # data_charge: ["data/data4600_cc.dat"] # charge conjugation condition same as weight
+    dat_order: [D, Ds, Pi]
+    data: [["../dataDDspi/dat/B0toD0Dspi_Data_Run1.dat"], ["../dataDDspi/dat/B0toD0Dspi_Data_Run2.dat"],["../dataDDspi/dat/B0toD0_K3piDspi_Data_Run1.dat"], ["../dataDDspi/dat/B0toD0_K3piDspi_Data_Run2.dat"]]
+    phsp: [["../dataDDspi/dat/B0toD0Dspi_MC_Run1.dat"], ["../dataDDspi/dat/B0toD0Dspi_MC_Run2.dat"],["../dataDDspi/dat/B0toD0_K3piDspi_MC_Run1.dat"], ["../dataDDspi/dat/B0toD0_K3piDspi_MC_Run2.dat"]]
+    phsp_weight: ["../dataDDspi/dat/B0toD0Dspi_MC_Run1_Weight.dat", "../dataDDspi/dat/B0toD0Dspi_MC_Run2_Weight.dat","../dataDDspi/dat/B0toD0_K3piDspi_MC_Run1_Weight.dat", "../dataDDspi/dat/B0toD0_K3piDspi_MC_Run2_Weight.dat"]
+    phsp_noeff: ["../dataDDspi/dat/B0toD0Dspi_MC_Noeff.dat"]
+    bg: [["../dataDDspi/dat/B0toD0Dspi_BSB_Run1.dat"], ["../dataDDspi/dat/B0toD0Dspi_BSB_Run2.dat"],["../dataDDspi/dat/B0toD0_K3piDspi_BSB_Run1.dat"], ["../dataDDspi/dat/B0toD0_K3piDspi_BSB_Run2.dat"]]
+    bg_weight: [0.152417, 0.109351, 0.193378, 0.0833175]
+    #use_tf_function: True
+    #cached_int: True
 
-# `decay` describe the decay structure, each node can be a list of particle name
+
 decay:
-  # each entry is a list of direct decay particle, or a list or the list.
-  # `dec_file` entry for loading `*.dec` files will be supported in the feature.
-  # `-` is often used for list in yaml
-  A:
-    # for example A -> R_CD + B, R_CD -> C + D
-    # the optional `key: value` mean option parameters of the decay
-    # note there, R1 is overrated by `particle` entry as R1 and R11
-    - [R_CD, B, model: default]
-    - - R_BD
-      - C
-      - model: "default"
-    - - R_BC
-      - D
-  # set l_list to allow only l=0
-  # - [ NR(BC)SP, D, curve_style: "g-", {has_barrier_factor: False, l_list: [0]}]
-  # - [B, C, D, curve_style: "darkgreen"]
-  # - [R_BC2, D, p_break: True] # allow P parity violate
-  # R_BC2: [B, C, c_break: False] # enable C parity select C=(-1)^(l+s)
-  R_CD:
-    - C
-    - D
-  R_BD: [B, D]
-  R_BC: [B, C]
-  # set l_list to allow only l=1
-  # NR(BC)SP: [B, C, {has_barrier_factor: False, l_list: [1]}]
-
-# `particle` describe the particle included
-# top, finals, include are used as keywords
-particle:
-  # top decay particle
-  $top:
-    A:
-      J: 1 # spin, use 1/2 or 0.5 for half spin
-      P: -1 # parity, alias: `Par`
-      spins: [-1, 1] # list of possible of spin-projected quantum numbers
-  # final particles
-  $finals:
     B:
-      J: 1
-      P: -1
-    C:
-      J: 1
-      P: -1
-    D:
-      J: 0
-      P: -1
-  # map for possible resonances in the same position
-  # each entry is a list of resonances id [option]
-  # include detailed parameters defined in `Resonances.yml`
-  $include: Resonances.sample.yml
-  R_BD:
-    - D2_2460p
-    - D1_2430p
-    - D1_2420p
-  R_BC: [Zc_4025, Zc_4160]
-  # by default the node is `name: [name]`
-  # set `[]` for particle which is not in real decays,
-  # just used for calculating angle data.
-  R_CD: []
-  # NR(BC)SP: {J: 1, P: -1, model: one}
+        - [BzR_DPi, Ds, p_break: True]
+        - [D1_2010, Ds, p_break: True, curve_style: "b--"]
+        - [BzR_DDs, Pi, p_break: True]
+        - [BzR_DsPi, D, p_break: True]
+        - [X0, D, p_break: True, curve_style: "purple"]
+        - [X1, D, p_break: True, curve_style: "magenta"]
+        - [X2, D, p_break: True, curve_style: "cyan"]
+        - [X0hist, D, p_break: True, curve_style: "purple"]
+        - [NR_DPi0, Ds, p_break: True, curve_style: "g-"]
+        - [NR_DPi1, Ds, p_break: True, curve_style: "b-"]
+        - [DPi_S, Ds, p_break: True, curve_style: "g-"]
+        - [DPi_P, Ds, p_break: True, curve_style: "b-"]
 
-# The following config is used for DecayChain
-# decay_chain:
-#   $all:
-#      is_cp: True
+    BzR_DPi: [D, Pi]
+    D1_2010: [D, Pi]
+    BzR_DDs: [D, Ds]
+    BzR_DsPi: [Ds, Pi]
+    X0: [Ds, Pi]
+    X1: [Ds, Pi]
+    X2: [Ds, Pi]
+    X0hist: [Ds, Pi]
+    NR_DPi0: [D, Pi]
+    NR_DPi1: [D, Pi]
+    DPi_S: [D, Pi]
+    DPi_P: [D, Pi]
+
+
+particle:
+    $top:
+        B: # Bz = 5.27963
+            J: 0
+            P: -1
+    # final particles
+    $finals:
+        D: # Dz = 1.86483
+            J: 0
+            P: -1
+        Ds: # Dsp = 1.96834
+            J: 0
+            P: -1
+        Pi: # pim = 0.13957039
+            J: 0
+            P: -1
+    $include: Resonances.sample.yml
+    BzR_DDs: []
+    BzR_DsPi: []
+    X0: [] #{J: 0, Par: 1, float: mg, m0: 2.879, g0: 0.109, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    X1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    X2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
+    BzR_DPi:
+        - D2_2460
+        #- D0_2400m
+        - D1_2600
+        #- D1_2840
+        #- D1_3100
+        #- D3_2750
+        #- D2_3100
+        #- D0_2900
+    D1_2010: {J: 1, Par: -1, m0: 2.01026, g0: 0.0000834}
+
+    NR_DPi0: [] #{display: "NR(0+)(D0pi-)", J: 0, P: 1, mass: 2.4, model: exp2}
+    NR_DPi1: [] #{display: "NR(1-)(D0pi-)", J: 1, P: -1, mass: 2.4, model: one}
+    DPi_S: {J: 0, P: 1, mass: 2.65, fix_idx: 4, model: spline_c, points: [1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 3.0, 3.2, 3.4, 3.5]}
+        #model: interp_hist, points: [1.95, 2.0, 2.05, 2.1, 2.15, 2.2, 2.25, 2.3, 2.35, 2.4, 2.42, 2.44, 2.46, 2.48, 2.5, 2.55, 2.6, 2.65, 2.7, 2.75, 2.85, 2.95, 3.05, 3.15, 3.25, 3.35]} #max_m: 3.35, min_m: 1.95, interp_N: 29}
+    DPi_P: [] #{J: 1, P: -1, mass: 2.65, #model: interp_hist, max_m: 3.4, min_m: 2.0, interp_N: 15}
+                #model: spline_c, points: [1.95, 2.05, 2.15, 2.25, 2.35, 2.45, 2.55, 2.65, 2.75, 2.85, 2.95, 3.05, 3.15, 3.25, 3.4]}
+    X0hist: [] #{J: 0, P: 1, mass: 2.970, model: interp_hist, points: [2.581,2.6605,2.74,2.8195,2.899,2.9785,3.058,3.1375,3.217]}#[2.648, 2.729, 2.809, 2.890, 2.970, 3.051, 3.131, 3.212, 3.292]}
 
 # constrains for params [WIP]
 constrains:
-  # particle:
-  #   equal:
-  #     mass: [[D1_2430p, D1_2430]]
-  decay: { fix_chain_idx: 0, fix_chain_val: 1 }
-  # fix_var:
-  #   "A->R_CD.BR_CD->C.D_total_0r": 1.0
-  # var_range:
-  #   "A->R_CD.BR_CD->C.D_total_0r": [1.0, null]
-  # var_equal:
-  #   -  ["A->R_CD.BR_CD->C.D_total_0r", "A->R_BD.CR_BD->B.D_total_0r"]
+    particle: null
+    decay: {fix_chain_idx: 0, fix_chain_val: 1}
 
-# plot describe the configuration of plotting 1-d data distribution
+
 plot:
-  # plot configuration TODO
-  config:
-    bins: 50
-  # invariant mass
-  mass:
-    R_CD:
-      # label of display
-      # use `$$` for latex math
-      display: "$M_{CD}$"
-      # upper_ylim: 200
-      # trans: x*x
-    R_BD:
-      display: "$M_{BD}$"
-    R_BC:
-      display: "$M_{BC}$"
-  # helicity angle
-  angle:
-    # If it named as `[.../]A/R_BC`, it refer to the  decay A -> R_BC ... in the decay chain has A and R_BC,
-    # the angle is determined by the last 2 particles, the other order is random.
-    # for example, D->E+F in [A->R_BC+D, D->E+F, R_BC->B+C] is `R_BC/D/E` or `A/R_BC/D/E` or `R_BC/A/D/E`
-    A/R_CD:
-      # include "alpha, cos(beta), gamma", # add `cos` for cos(beta)
-      alpha:
-        display: "$\\phi_{1}$" # the default is "A/0:$\alpha$"
-      cos(beta):
-        display: "$\\cos(\\theta_1)$" # the default is "A/0:$\beta$"
-        range: [-1, 1] # range for plot
-    A/R_BD:
-      alpha:
-        display: "$\\phi_{2}$"
-      cos(beta):
-        display: "$\\cos(\\theta_2)$"
-    A/R_BC:
-      alpha:
-        display: "$\\phi_{3}$"
-      cos(beta):
-        display: "$\\cos(\\theta_3)$"
-    R_BC/B:
-      alpha:
-        display: "$\\phi_{11}$"
-      cos(beta):
-        display: "$\\cos(\\theta_{11})$"
-    R_CD/C:
-      alpha:
-        display: "$\\phi_{1}$"
-      cos(beta):
-        display: "$\\cos(\\theta_{21})$"
-    R_BD/B:
-      alpha:
-        display: "$\\phi_{1}$"
-      cos(beta):
-        display: "$\\cos(\\theta_{31})$"
-  # 2D plot
-  2Dplot:
-    m_R_CD & m_R_BC:
-      display: "$M_{CD}$ vs $M_{BC}$"
-      plot_figs: ["data", "sideband", "fitted"]
+    # plot configuration TODO
+    config:
+        bins: 100
+    # invariant mass
+    mass:
+        BzR_DDs:
+            display: "$M_{\\bar D^0D_s^+}$"
+            legend: True
+            #trans: x*x
+        BzR_DPi:
+            display: "$M_{\\bar D^0\\pi^-}$"
+            legend: True
+            #trans: x*x
+        BzR_DsPi:
+            display: "$M_{D_s^+\\pi^-}$"
+            legend: True
+            #trans: x*x
+    angle:
+        BzR_DPi/D:
+            cos(beta):
+                display: "$\\cos(\\theta^{\\bar D^0\\pi^-}_{\\bar D^0})$"
+                range: [-1, 1]
+        BzR_DsPi/Ds:
+            cos(beta):
+                display: "$\\cos(\\theta^{D_s^+\\pi^-}_{D_s^+})$"
+                range: [-1, 1]
+        BzR_DDs/D:
+            cos(beta):
+                display: "$\\cos(\\theta^{\\bar D^0D_s^+}_{\\bar D^0})$"
+                range: [-1, 1]
+    # 2D plot
+    2Dplot:
+        m_BzR_DPi & m_BzR_DsPi:
+            display: "$M_{\\bar D^0\\pi^-}^2$ vs $M_{D_s^+\\pi^-}^2$"
+            trans: x*x
+            plot_figs: [""]
+    #    m_BzR_DsPi & m_BzR_DDs:
+    #        display: "$M_{D_s^+\\pi^-}^2$ vs $M_{\\bar D^0D_s^+}^2$"
+    #        plot_figs: ["data", "sideband"]
+    #    m_BzR_DDs & m_BzR_DPi:
+    #        display: "$M_{\\bar D^0D_s^+}^2$ vs $M_{\\bar D^0\\pi^-}^2$"
+    #        plot_figs: ["data", "sideband", "fitted"]
+
+
+
+
+
+
+
+##### config_Bp.yml
+data:
+    dat_order: [D, Ds, Pi]
+    data: [["../dataDDspi/dat/BptoDmDspi_Data_Run1.dat"], ["../dataDDspi/dat/BptoDmDspi_Data_Run2.dat"]]
+    phsp: [["../dataDDspi/dat/BptoDmDspi_MC_Run1.dat"], ["../dataDDspi/dat/BptoDmDspi_MC_Run2.dat"]]
+    phsp_weight: ["../dataDDspi/dat/BptoDmDspi_MC_Run1_Weight.dat", "../dataDDspi/dat/BptoDmDspi_MC_Run2_Weight.dat"]
+    phsp_noeff: ["../dataDDspi/dat/BptoDmDspi_MC_Noeff.dat"]
+    bg: [["../dataDDspi/dat/BptoDmDspi_BSB_Run1.dat"], ["../dataDDspi/dat/BptoDmDspi_BSB_Run2.dat"]]
+    bg_weight: [0.145735, 0.0915304]
+    #use_tf_function: True
+    #cached_int: True
+
+
+decay:
+    B:
+        - [BpR_DPi, Ds, p_break: True]
+        - [D1_2007, Ds, p_break: True, curve_style: "b--"]
+        - [BpR_DDs, Pi, p_break: True]
+        - [BpR_DsPi, D, p_break: True]
+        - [X0, D, p_break: True, curve_style: "purple"]
+        - [X1, D, p_break: True, curve_style: "magenta"]
+        - [X2, D, p_break: True, curve_style: "cyan"]
+        - [X0hist, D, p_break: True, curve_style: "purple"]
+        - [NR_DPi0, Ds, p_break: True, curve_style: "g-"]
+        - [NR_DPi1, Ds, p_break: True, curve_style: "b-"]
+        - [DPi_S, Ds, p_break: True, curve_style: "g-"]
+        - [DPi_P, Ds, p_break: True, curve_style: "b-"]
+
+    BpR_DPi: [D, Pi]
+    D1_2007: [D, Pi, has_barrier_factor: False]
+    BpR_DDs: [D, Ds]
+    BpR_DsPi: [Ds, Pi]
+    X0: [Ds, Pi]
+    X1: [Ds, Pi]
+    X2: [Ds, Pi]
+    X0hist: [Ds, Pi]
+    NR_DPi0: [D, Pi]
+    NR_DPi1: [D, Pi]
+    DPi_S: [D, Pi]
+    DPi_P: [D, Pi]
+
+
+particle:
+    $top:
+        B: # Bp = 5.27934
+            J: 0
+            P: -1
+    # final particles
+    $finals:
+        D: # Dm = 1.86965
+            J: 0
+            P: -1
+        Ds: # Dsp = 1.96834
+            J: 0
+            P: -1
+        Pi: # pip = 0.13957039
+            J: 0
+            P: -1
+    $include: Resonances.sample.yml
+    BpR_DDs: []
+    BpR_DsPi: []
+    X0: [] #{J: 0, Par: 1, float: mg, m0: 2.879, g0: 0.109, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    X1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    X2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
+    BpR_DPi:
+        - D2_2460
+        #- D0_2400o
+        - D1_2600
+        #- D1_2840
+        #- D1_3100
+        #- D3_2750
+        #- D2_3100
+        #- D0_2900
+    D1_2007: {J: 1, Par: -1, m0: 2.00685, g0: 0.0001, model: BW2007}
+
+    NR_DPi0: [] #{display: "NR(0+)(D-pi+)", J: 0, P: 1, mass: 2.4, model: exp2}
+    NR_DPi1: [] #{display: "NR(1-)(D-pi+)", J: 1, P: -1, mass: 2.4, model: one}
+    DPi_S: {J: 0, P: 1, mass: 2.65, fix_idx: 4, model: spline_c, points: [1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 3.0, 3.2, 3.4, 3.5]}
+        #model: interp_hist, points: [1.95, 2.0, 2.05, 2.1, 2.15, 2.2, 2.25, 2.3, 2.35, 2.4, 2.42, 2.44, 2.46, 2.48, 2.5, 2.55, 2.6, 2.65, 2.7, 2.75, 2.85, 2.95, 3.05, 3.15, 3.25, 3.35]} #max_m: 3.35, min_m: 1.95, interp_N: 29}
+    DPi_P: [] #{J: 1, P: -1, mass: 2.65, #model: interp_hist, max_m: 3.4, min_m: 2.0, interp_N: 15}
+                #model: spline_c, points: [1.95, 2.05, 2.15, 2.25, 2.35, 2.45, 2.55, 2.65, 2.75, 2.85, 2.95, 3.05, 3.15, 3.25, 3.4]}
+    X0hist: [] #{J: 0, P: 1, mass: 2.959, model: interp_hist, points: [2.581,2.6605,2.74,2.8195,2.899,2.9785,3.058,3.1375,3.217]}#[2.648, 2.729, 2.809, 2.890, 2.970, 3.051, 3.131, 3.212, 3.292]}
+
+# constrains for params [WIP]
+constrains:
+    particle: null
+    decay: {fix_chain_idx: 0, fix_chain_val: 1}
+
+
+plot:
+    # plot configuration TODO
+    config:
+        bins: 100
+    # invariant mass
+    mass:
+        BpR_DDs:
+            display: "$M_{D^-D_s^+}$"
+            legend: True
+            #trans: x*x
+        BpR_DPi:
+            display: "$M_{D^-\\pi^+}$"
+            legend: True
+            #trans: x*x
+        BpR_DsPi:
+            display: "$M_{D_s^+\\pi^+}$"
+            legend: True
+            #trans: x*x
+    angle:
+        BpR_DPi/D:
+            cos(beta):
+                display: "$\\cos(\\theta^{D^-\\pi^+}_{D^-})$"
+                range: [-1, 1]
+        BpR_DsPi/Ds:
+            cos(beta):
+                display: "$\\cos(\\theta^{D_s^+\\pi^+}_{D_s^+})$"
+                range: [-1, 1]
+        BpR_DDs/D:
+            cos(beta):
+                display: "$\\cos(\\theta^{D^-D_s^+}_{D^-})$"
+                range: [-1, 1]
+    # 2D plot
+    2Dplot:
+        m_BpR_DPi & m_BpR_DsPi:
+            display: "$M_{D^-\\pi^+}^2$ vs $M_{D_s^+\\pi^+}^2$"
+            trans: x*x
+            plot_figs: [""]
+    #    m_BpR_DsPi & m_BpR_DDs:
+    #        display: "$M_{D_s^+\\pi^+}^2$ vs $M_{D^-D_s^+}^2$"
+    #        plot_figs: ["data", "sideband"]
+    #    m_BpR_DDs & m_BpR_DPi:
+    #        display: "$M_{D^-D_s^+}^2$ vs $M_{D^-\\pi^+}^2$"
+    #        plot_figs: ["data", "sideband"]

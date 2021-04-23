@@ -28,7 +28,7 @@ class ParticleExp(Particle):
         mass = data["m"]
         zeros = tf.zeros_like(mass)
         a = tf.abs(self.a())
-        return tf.complex(tf.exp(-a * (mass * mass)), zeros) # - 4.0272863761
+        return tf.complex(tf.exp(-a * (mass * mass - 4.0)), zeros) # - 4.0272863761
 
 # D0 1.86483 pi0 0.1349768
 from tf_pwa.breit_wigner import BWR, Bprime
@@ -57,7 +57,7 @@ def load_config(config_file="config.yml", total_same=False):
     return MultiConfig(config_files, total_same=total_same)
 
 
-def fit(config, init_params="", method="BFGS", loop=1, maxiter=500):
+def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500):
     """
     simple fit script
     """
@@ -76,6 +76,8 @@ def fit(config, init_params="", method="BFGS", loop=1, maxiter=500):
             print("\nusing RANDOM parameters", flush=True)
         # try to fit
         try:
+            #vm.rp2xy_all()
+            vm.std_polar_all()
             fit_result = config.fit(
                 batch=65000, method=method, maxiter=maxiter
             )
@@ -118,7 +120,8 @@ def fit(config, init_params="", method="BFGS", loop=1, maxiter=500):
 
     return fit_result
 
-
+from frac_table import frac_table
+from tf_pwa.data import data_cut
 def write_some_results(config, fit_result, save_root=False):
     # plot partial wave distribution
     config.plot_partial_wave(fit_result, plot_pull=True, save_root=save_root, smooth=False)
@@ -140,8 +143,8 @@ def write_some_results(config, fit_result, save_root=False):
     print(fit_frac_string)
     save_frac_csv("fit_frac.csv", fit_frac)
     save_frac_csv("fit_frac_err.csv", err_frac)
-    # from frac_table import frac_table
-    # frac_table(fit_frac_string)
+    from frac_table import frac_table
+    frac_table(fit_frac_string)
     # chi2, ndf = config.cal_chi2(mass=["R_BC", "R_CD"], bins=[[2,2]]*4)
 
 
@@ -150,12 +153,28 @@ def write_some_results_combine(config, fit_result, save_root=False):
     from tf_pwa.applications import fit_fractions
 
     for i, c in enumerate(config.configs):
+        res = None
+        res_curvestyle = None
+        '''if i is 0:
+            res = ["D1_2010","D2_2460","D1_2600",["NR_DPi0","D0_2400m"],"X0"]
+        elif i is 1:
+            res = ["D1_2007","D2_2460","D1_2600",["NR_DPi0","D0_2400o"],"X0"]
+        res_curvestyle = ["b--","r","r--","g","purple"]'''
         c.plot_partial_wave(
-            fit_result, prefix="figure/".format(i), save_root=save_root, smooth=False
+            fit_result, prefix="figure/".format(i), plot_pull=True, save_root=save_root, smooth=False
         )
+        '''cut_string = "(m<2.7)&(m>2.3)"
+        data, phsp, bg, _ = c.get_all_data()
+        data = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in data]
+        phsp = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in phsp]
+        bg = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in bg]
+        #bg = [None, None]
+        c.plot_partial_wave(fit_result, prefix="figure_simul", plot_pull=True, data=data, phsp=phsp, bg=bg)
+        '''
 
     for it, config_i in enumerate(config.configs):
         print("########## fit fractions {}:".format(it))
+        print("nll{}".format(it),config_i.get_fcn()({}).numpy())
         mcdata = config_i.get_phsp_noeff()
         fit_frac, err_frac = fit_fractions(
             config_i.get_amplitude(),
@@ -175,8 +194,8 @@ def write_some_results_combine(config, fit_result, save_root=False):
         print(fit_frac_string)
         save_frac_csv(f"fit_frac{it}.csv", fit_frac)
         save_frac_csv(f"fit_frac{it}_err.csv", err_frac)
-    # from frac_table import frac_table
-    # frac_table(fit_frac_string)
+    from frac_table import frac_table
+    frac_table(fit_frac_string)
 
 
 def save_frac_csv(file_name, fit_frac):
@@ -223,8 +242,18 @@ def main():
         devices = "/device:CPU:0"
     with tf.device(devices):
         config = load_config(results.config, results.total_same)
+        try:
+            vm = config.get_amplitudes()[0].vm
+            vm.set_same(["B->D1_2010.DsD1_2010->D.Pi_total_0", "B->D1_2007.DsD1_2007->D.Pi_total_0"], cplx=True)
+        except:
+            vm = config.get_amplitude().vm
+        #vm.rp2xy_all()
+        try:
+            vm.set_same(["B->D0_2400m.DsD0_2400m->D.Pi_total_0", "B->D0_2400o.DsD0_2400o->D.Pi_total_0"], cplx=True)
+        except:
+            pass
         fit_result = fit(
-            config, results.init, results.method, results.loop, results.maxiter
+            config, vm, results.init, results.method, results.loop, results.maxiter
         )
         if isinstance(config, ConfigLoader):
             write_some_results(config, fit_result, save_root=results.save_root)
