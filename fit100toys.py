@@ -41,14 +41,6 @@ def generate_mc(num):
     p_D, p_pi = b.generate(num)
     return [i.numpy() for i in [p_D1, p_D2, p_K, p_D, p_pi]]
 
-def index_bin(x, xi):
-    xi1 = np.expand_dims(xi, axis=-1)
-    mask = (x[:, 0] < xi1) & (x[:, 1] > xi1)
-    idx1, idx2 = np.nonzero(mask)
-    idx = np.zeros_like(xi, dtype="int64")
-    idx[idx1] = idx2
-    return idx
-
 class EffWeight:
     def __init__(self, root_file):
         self.f = uproot.open(root_file)
@@ -56,11 +48,39 @@ class EffWeight:
         self.x_bins, self.y_bins = self.eff_bin[0].bins  # assert all bins same
         self.values = np.array([i.values for i in self.eff_bin])
 
+    def index_bin(self, x, xi):
+        xi1 = np.expand_dims(xi, axis=-1)
+        mask = (x[:, 0] < xi1) & (x[:, 1] > xi1)
+        idx1, idx2 = np.nonzero(mask)
+        idx = np.zeros_like(xi, dtype="int64")
+        idx[idx1] = idx2
+        return idx
+
     def eff_weight(self, cos_hel, m2_13, m2_23):
         n_histo = (3 - np.floor((cos_hel + 1) / 0.5) + 1).astype("int64")  # [-1,1]->[4,3,2,1]
-        x_idx = index_bin(self.x_bins, m2_13)
-        y_idx = index_bin(self.y_bins, m2_23)
-        return self.values[n_histo, x_idx, y_idx]
+        x_idx = self.index_bin(self.x_bins, m2_13)
+        y_idx = self.index_bin(self.y_bins, m2_23)
+        values = self.values[n_histo, x_idx, y_idx]
+        values = self._where_eff_0_(values, n_histo, x_idx, y_idx)
+        return values
+
+    def _where_eff_0_(self, values, n_histo, x_idx, y_idx):
+        new_vals = values.copy()
+        for tr_fl, idx in zip(values > 0, range(len(n_histo))):
+            if not tr_fl:        
+                tmp = 0
+                n = 0
+                tmp_val = 0
+                for i in range(-1,2):
+                    for j in range(-1,2):
+                        tmp_val = self.values[n_histo[idx], x_idx[idx]+i, y_idx[idx]+j]
+                        if tmp_val > 0:
+                            tmp += tmp_val
+                            n += 1
+                if n is 0:
+                    print("$#@!!check", n_histo[idx], x_idx[idx], y_idx[idx])
+                new_vals[idx] = tmp/n
+        return new_vals
 
 def _generate_mc_eff(num, eff_file):
     p_D1, p_D2, p_K, p_D, p_pi = generate_mc(num)
@@ -96,7 +116,7 @@ def gen_toy(amp):
     gen_eff_mc(nmc//2, rn, channel)
     gen_data(amp, ndata, mcfile="toy/toydat/toyMC_"+channel+"Run"+str(rn)+".dat", 
             genfile="toy/toydat/toy_"+channel+"Run"+str(rn)+".dat", Poisson_fluc=True, 
-            )#Nbg=nbg, wbg=wbg, bgfile="../dataDstarDK/dat/sb_"+channel+"Run"+str(rn)+".dat")
+            Nbg=nbg, wbg=wbg, bgfile="../dataDstarDK/dat/sb_"+channel+"Run"+str(rn)+".dat")
     gen_eff_mc(nmc, rn, channel)
 
     rn = 2
@@ -105,7 +125,7 @@ def gen_toy(amp):
     gen_eff_mc(nmc//2, rn, channel)
     gen_data(amp, ndata, mcfile="toy/toydat/toyMC_"+channel+"Run"+str(rn)+".dat", 
             genfile="toy/toydat/toy_"+channel+"Run"+str(rn)+".dat", Poisson_fluc=True, 
-            )#Nbg=nbg, wbg=wbg, bgfile="../dataDstarDK/dat/sb_"+channel+"Run"+str(rn)+".dat")
+            Nbg=nbg, wbg=wbg, bgfile="../dataDstarDK/dat/sb_"+channel+"Run"+str(rn)+".dat")
     gen_eff_mc(nmc, rn, channel)
     
     channel = "Dst_K3pi"; rn = 1
@@ -114,7 +134,7 @@ def gen_toy(amp):
     gen_eff_mc(nmc//2, rn, channel)
     gen_data(amp, ndata, mcfile="toy/toydat/toyMC_"+channel+"Run"+str(rn)+".dat", 
             genfile="toy/toydat/toy_"+channel+"Run"+str(rn)+".dat", Poisson_fluc=True, 
-            )#Nbg=nbg, wbg=wbg, bgfile="../dataDstarDK/dat/sb_"+channel+"Run"+str(rn)+".dat")
+            Nbg=nbg, wbg=wbg, bgfile="../dataDstarDK/dat/sb_"+channel+"Run"+str(rn)+".dat")
     gen_eff_mc(nmc, rn, channel)
 
     rn = 2
@@ -123,7 +143,7 @@ def gen_toy(amp):
     gen_eff_mc(nmc//2, rn, channel)
     gen_data(amp, ndata, mcfile="toy/toydat/toyMC_"+channel+"Run"+str(rn)+".dat", 
             genfile="toy/toydat/toy_"+channel+"Run"+str(rn)+".dat", Poisson_fluc=True, 
-            )#Nbg=nbg, wbg=wbg, bgfile="../dataDstarDK/dat/sb_"+channel+"Run"+str(rn)+".dat")
+            Nbg=nbg, wbg=wbg, bgfile="../dataDstarDK/dat/sb_"+channel+"Run"+str(rn)+".dat")
     gen_eff_mc(nmc, rn, channel)
     
     channel = "D_K3pi"; rn = 1
@@ -132,7 +152,7 @@ def gen_toy(amp):
     gen_eff_mc(nmc//2, rn, channel)
     gen_data(amp, ndata, mcfile="toy/toydat/toyMC_"+channel+"Run"+str(rn)+".dat", 
             genfile="toy/toydat/toy_"+channel+"Run"+str(rn)+".dat", Poisson_fluc=True, 
-            )#Nbg=nbg, wbg=wbg, bgfile="../dataDstarDK/dat/sb_"+channel+"Run"+str(rn)+".dat")
+            Nbg=nbg, wbg=wbg, bgfile="../dataDstarDK/dat/sb_"+channel+"Run"+str(rn)+".dat")
     gen_eff_mc(nmc, rn, channel)
 
     rn = 2
@@ -141,13 +161,13 @@ def gen_toy(amp):
     gen_eff_mc(nmc//2, rn, channel)
     gen_data(amp, ndata, mcfile="toy/toydat/toyMC_"+channel+"Run"+str(rn)+".dat", 
             genfile="toy/toydat/toy_"+channel+"Run"+str(rn)+".dat", Poisson_fluc=True, 
-            )#Nbg=nbg, wbg=wbg, bgfile="../dataDstarDK/dat/sb_"+channel+"Run"+str(rn)+".dat")
+            Nbg=nbg, wbg=wbg, bgfile="../dataDstarDK/dat/sb_"+channel+"Run"+str(rn)+".dat")
     gen_eff_mc(nmc, rn, channel)
 
 
 fp = {}
 fe = {}
-def fit(i):
+def fit(i, n):
     vm = VarsManager()
     config = ConfigLoader("toy/config_toy.yml", vm=vm)
     #config0 = ConfigLoader("toy/config_toy0.yml", vm=vm)
@@ -165,6 +185,16 @@ def fit(i):
     if not fit_result.success:
         print("$$$$$failed")
         return
+
+    for ni in range(n-1):
+        config.set_params("toy/toy_params.json")
+        config.reinit_params()
+        fit_res = config.fit(batch=150000, method="BFGS")
+        if fit_res.success and (fit_res.min_nll < fit_result.min_nll):
+            print("$$$ New Min Found")
+            fit_result = fit_res
+    config.set_params(fit_result.params)
+
     amp.cached_fun = amp.decay_group.sum_amp # turn off use_tf_function
     amp.vm.rp2xy_all()
     fit_result = config0.fit(batch=150000, method="BFGS")
@@ -190,7 +220,7 @@ def main(Ntoy):
         os.mkdir("toy/toydat")
     print("$$$$$Start fit100toys")
     for i in range(Ntoy):
-        fit(i)
+        fit(i, n=10)
 
 if __name__ == "__main__":
     main(40)
