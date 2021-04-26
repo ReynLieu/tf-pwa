@@ -89,7 +89,7 @@ def plot_moment(data, fitted, order=0, prefix=""):
 
 def main():
     mode = "Bp" # edit
-    with uproot.open("trash/figure/variables_com.root") as f: # edit
+    with uproot.open("figure/variables_com.root") as f: # edit
         data = get_data(f.get("data"), "", "data_weights", mode)
         bg = get_data(f.get("sideband"), "_sideband", "sideband_weights", mode)
         fitted = get_data(f.get("fitted"), "_MC", "MC_total_fit", mode)

@@ -94,7 +94,7 @@ def draw_dalitz(data_cut, bound, numbers, mode):
     # ax.scatter(data_cut[0]**2, data_cut[1]**2, s=1, c="red")
     ## using your own mass
     if mode == "Bz":
-        m0, mb, mc, md = 5.27963, 0.13957039, 1.86483, 1.96834
+        m0, mb, mc, md = 5.27965, 0.13957039, 1.86483, 1.96834
     elif mode == "Bp":
         m0, mb, mc, md = 5.27934, 0.13957039, 1.86965, 1.96834
     # print(ah)
@@ -121,7 +121,7 @@ def draw_dalitz(data_cut, bound, numbers, mode):
 
 def main():
     mode = "Bz" # edit here
-    data, phsp, bg = load_root_data("trash/figure/variables_com.root") # edit here
+    data, phsp, bg = load_root_data("figure/variables_com.root") # edit here
 
     data_cut = np.array([data[f"m_{mode}R_DPi"]**2, data[f"m_{mode}R_DsPi"]**2])
     adapter = AdaptiveBound(data_cut, [[2, 2]]*3)
