@@ -174,7 +174,7 @@ def write_some_results_combine(config, fit_result, save_root=False):
 
     for it, config_i in enumerate(config.configs):
         print("########## fit fractions {}:".format(it))
-        print("nll{}".format(it),config_i.get_fcn()({}).numpy())
+        print(f"nll{it}", config_i.get_fcn()({}).numpy())
         mcdata = config_i.get_phsp_noeff()
         fit_frac, err_frac = fit_fractions(
             config_i.get_amplitude(),
@@ -222,16 +222,24 @@ def main():
     parser.add_argument(
         "--no-GPU", action="store_false", default=True, dest="has_gpu"
     )
-    parser.add_argument("-c", "--config", default="config.yml", dest="config")
+    parser.add_argument(
+        "-c", "--config", default="config.yml", dest="config"
+    )
     parser.add_argument(
         "-i", "--init_params", default="init_params.json", dest="init"
     )
-    parser.add_argument("-m", "--method", default="BFGS", dest="method")
-    parser.add_argument("-l", "--loop", type=int, default=1, dest="loop")
+    parser.add_argument(
+        "-m", "--method", default="BFGS", dest="method"
+    )
+    parser.add_argument(
+        "-l", "--loop", type=int, default=1, dest="loop"
+    )
     parser.add_argument(
         "-x", "--maxiter", type=int, default=2000, dest="maxiter"
     )
-    parser.add_argument("-r", "--save_root", default=False, dest="save_root")
+    parser.add_argument(
+        "-r", "--save_root", default=False, dest="save_root"
+    )
     parser.add_argument(
         "--total-same", action="store_true", default=True, dest="total_same"
     )
@@ -256,7 +264,9 @@ def main():
             config, vm, results.init, results.method, results.loop, results.maxiter
         )
         if isinstance(config, ConfigLoader):
-            write_some_results(config, fit_result, save_root=results.save_root)
+            write_some_results(
+                config, fit_result, save_root=results.save_root
+            )
         else:
             write_some_results_combine(
                 config, fit_result, save_root=results.save_root
