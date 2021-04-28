@@ -46,6 +46,7 @@ Zc_3900m: {
   Chain: 12, J: 1, Par: 1,
   m0: 3.8822, m_sigma: 0.002, m_max: 3.9022, m_min: 3.8622,
   g0: 0.0265, g_sigma: 0.0028, g_max: 0.05, g_min: 0.0001,
+  model: BWR_LS,
   float: ,
   #gauss_constr: mg,
 }
