@@ -31,13 +31,15 @@ def plot_partial_wave(
     prefix="figure/",
     res=None,
     save_root=False,
+    show_nll=False,
     **kwargs
 ):
     if params is None:
         params = {}
     nll = None
-    if hasattr(params, "min_nll"):
-        nll = float(getattr(params, "min_nll"))
+    if show_nll:
+        if hasattr(params, "min_nll"):
+            nll = float(getattr(params, "min_nll"))
     if hasattr(params, "params"):
         params = getattr(params, "params")
     # print(nll, params)
@@ -215,7 +217,7 @@ def plot_partial_wave(
                         file_name=prefix + "variables_com.root",
                         tree_name=["data", "fitted", "sideband"],
                     )
-                print("Save root file " + prefix + "com_variables.root")
+                print("Save root file " + prefix + "variables_com.root")
 
 
 @ConfigLoader.register_function()
