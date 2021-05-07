@@ -498,6 +498,8 @@ def _plot_partial_wave(
             ax.set_ylim((0, upper_ylim))
         ax.set_xlim(xrange)
         ax.set_yscale(yscale)
+        ax.minorticks_on()
+        ax.tick_params(axis='y', which='minor', left=False)
         if has_legend:
             leg = ax.legend(
                 legends,
@@ -545,6 +547,7 @@ def _plot_partial_wave(
                 )
                 ax2.set_ylabel("pull")
                 ax2.set_ylim((-5, 5))
+                ax2.minorticks_on()
             else:
                 diff_hist = data_hist - fitted_hist
                 diff_hist.draw_bar(color="grey")

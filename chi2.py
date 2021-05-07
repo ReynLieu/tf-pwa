@@ -5,6 +5,7 @@ import sys
 import matplotlib.colors as mcolors
 import matplotlib.patches as mpathes
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import MultipleLocator
 import numpy as np
 
 from tf_pwa.adaptive_bins import AdaptiveBound, cal_chi2
@@ -87,7 +88,7 @@ def draw_dalitz(data_cut, bound, numbers):
         ax.add_patch(rect)
 
     ah = ax.scatter(
-        data_cut[0], data_cut[1], c="black", s=1.0
+        data_cut[0], data_cut[1], c="black", s=1.0, marker='.', alpha=0.5
     )
     ah.set_zorder(100)
     # ax.scatter(data_cut[0]**2, data_cut[1]**2, s=1, c="red")
@@ -104,17 +105,28 @@ def draw_dalitz(data_cut, bound, numbers):
     ax.set_ylim((np.min(data_cut[1]), np.max(data_cut[1])))
     ax.set_xlabel("$M_{D^{0}K^{+}}^2$ GeV$^2$")
     ax.set_ylabel("$M_{D^{*-}D^{0}}^2$ GeV$^2$")
+    x_major_locator=MultipleLocator(0.5)
+    x_minor_locator=MultipleLocator(0.1)
+    y_major_locator=MultipleLocator(1)
+    y_minor_locator=MultipleLocator(0.2)
+    ax.xaxis.set_major_locator(x_major_locator)
+    ax.xaxis.set_minor_locator(x_minor_locator)
+    ax.yaxis.set_major_locator(y_major_locator)
+    ax.yaxis.set_minor_locator(y_minor_locator)
+    plt.tick_params(top='on', right='on', which='both')
 
-    gradient = np.linspace(-5, 5, 256)
+    gradient = np.linspace(-max_chi, max_chi, 256)
     gradient = np.vstack((gradient, gradient))
     img = ax.imshow(gradient, aspect='auto', cmap=my_cmap)
     fig.colorbar(img) # ah[-1])
-    plt.savefig("figs/MI_2Dpull.png", dpi=200) # edit here
+    save_path = "figs/BW_2Dpull.png" # edit here
+    plt.savefig(save_path, dpi=200)
+    print("Done saving", save_path)
 
 
 def main():
-    data, phsp, bg = load_root_data("figure/variables_com.root") # edit here
-    n_fp = 55 # edit here
+    data, phsp, bg = load_root_data("save/BWbase/BWbase.root") # edit here
+    n_fp = 27 # edit here
 
     data_cut = np.array([data["m_R_CD"]**2, data["m_R_BC"]**2])
     adapter = AdaptiveBound(data_cut, [[3, 2]]*3)
