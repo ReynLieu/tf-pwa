@@ -31,13 +31,15 @@ def plot_partial_wave(
     prefix="figure/",
     res=None,
     save_root=False,
+    show_nll=True,
     **kwargs
 ):
     if params is None:
         params = {}
     nll = None
-    if hasattr(params, "min_nll"):
-        nll = float(getattr(params, "min_nll"))
+    if show_nll:
+        if hasattr(params, "min_nll"):
+            nll = float(getattr(params, "min_nll"))
     if hasattr(params, "params"):
         params = getattr(params, "params")
     # print(nll, params)
@@ -215,7 +217,7 @@ def plot_partial_wave(
                         file_name=prefix + "variables_com.root",
                         tree_name=["data", "fitted", "sideband"],
                     )
-                print("Save root file " + prefix + "com_variables.root")
+                print("Save root file " + prefix + "variables_com.root")
 
 
 @ConfigLoader.register_function()
@@ -496,6 +498,8 @@ def _plot_partial_wave(
             ax.set_ylim((0, upper_ylim))
         ax.set_xlim(xrange)
         ax.set_yscale(yscale)
+        ax.minorticks_on()
+        ax.tick_params(axis='y', which='minor', left=False)
         if has_legend:
             leg = ax.legend(
                 legends,
@@ -543,6 +547,7 @@ def _plot_partial_wave(
                 )
                 ax2.set_ylabel("pull")
                 ax2.set_ylim((-5, 5))
+                ax2.minorticks_on()
             else:
                 diff_hist = data_hist - fitted_hist
                 diff_hist.draw_bar(color="grey")
