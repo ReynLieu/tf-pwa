@@ -83,8 +83,11 @@ def plot_moment(data, fitted, order=0, prefix=""):
     (hist1-hist2).draw_pull(ax2)
     ax2.set_xlabel(r"$M_{D^-\pi^+}$/GeV") # edit
     ax.set_ylabel(f"$\\langle Y_{order} \\rangle$")
+    ax.minorticks_on()
+    ax.tick_params(axis='y', which='minor', left=False)
     ax2.set_ylabel("pull")
     ax2.set_ylim((-5,5))
+    ax2.minorticks_on()
 
 
 def main():
