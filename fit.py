@@ -161,15 +161,15 @@ def write_some_results_combine(config, fit_result, save_root=False):
             res = ["D1_2007","D2_2460","D1_2600",["NR_DPi0","D0_2400o"],"X0"]
         res_curvestyle = ["b--","r","r--","g","purple"]'''
         c.plot_partial_wave(
-            fit_result, prefix="figure/".format(i), plot_pull=True, save_root=save_root, smooth=False
+            fit_result, prefix="figure/", plot_pull=True, save_root=save_root, smooth=False
         )
-        '''cut_string = "(m<2.7)&(m>2.3)"
+        '''cut_string = "(m>2.7)"
         data, phsp, bg, _ = c.get_all_data()
         data = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in data]
         phsp = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in phsp]
         bg = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in bg]
         #bg = [None, None]
-        c.plot_partial_wave(fit_result, prefix="figure_simul", plot_pull=True, data=data, phsp=phsp, bg=bg)
+        c.plot_partial_wave(fit_result, prefix="figure/", plot_pull=True, smooth=False, data=data, phsp=phsp, bg=bg)
         '''
 
     for it, config_i in enumerate(config.configs):
@@ -194,8 +194,8 @@ def write_some_results_combine(config, fit_result, save_root=False):
         print(fit_frac_string)
         save_frac_csv(f"fit_frac{it}.csv", fit_frac)
         save_frac_csv(f"fit_frac{it}_err.csv", err_frac)
-    from frac_table import frac_table
-    frac_table(fit_frac_string)
+        from frac_table import frac_table
+        frac_table(fit_frac_string)
 
 
 def save_frac_csv(file_name, fit_frac):
