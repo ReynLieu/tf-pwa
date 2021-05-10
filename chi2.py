@@ -5,6 +5,7 @@ import sys
 import matplotlib.colors as mcolors
 import matplotlib.patches as mpathes
 import matplotlib.pyplot as plt
+from matplotlib.pyplot import MultipleLocator
 import numpy as np
 
 from tf_pwa.adaptive_bins import AdaptiveBound, cal_chi2
@@ -12,7 +13,6 @@ from tf_pwa.angle import kine_max, kine_min
 from tf_pwa.config_loader import ConfigLoader
 from tf_pwa.data import data_index, data_to_numpy
 from tf_pwa.experimental import extra_amp, extra_data
-from fit import ParticleExp
 import uproot
 
 def load_root_data(file_name):
@@ -27,7 +27,7 @@ def load_root_data(file_name):
 
 
 def cal_chi2_config(
-    adapter, data, phsp, bg=None
+    adapter, data, phsp, bg=None, n_fp=0
 ):
     phsps = adapter.split_data(phsp)
     datas = adapter.split_data(data)
@@ -45,7 +45,7 @@ def cal_chi2_config(
         if bg is not None:
             nmc += np.sum(bgs[i][2])
         numbers.append((ndata, nmc))
-    return cal_chi2(numbers, 0), numbers
+    return cal_chi2(numbers, n_fp), numbers
 
 
 def draw_dalitz(data_cut, bound, numbers, mode):
@@ -88,7 +88,7 @@ def draw_dalitz(data_cut, bound, numbers, mode):
         ax.add_patch(rect)
 
     ah = ax.scatter(
-        data_cut[0], data_cut[1], c="black", s=1.0
+        data_cut[0], data_cut[1], c="black", s=1.0, marker='.', alpha=0.5
     )
     ah.set_zorder(100)
     # ax.scatter(data_cut[0]**2, data_cut[1]**2, s=1, c="red")
@@ -112,29 +112,44 @@ def draw_dalitz(data_cut, bound, numbers, mode):
     elif mode == "Bp":
         ax.set_xlabel("$M_{D^{-}\\pi^{+}}^2$ GeV$^2$")
         ax.set_ylabel("$M_{D_{s}^{+}\\pi^{+}}^2$ GeV$^2$")
-    gradient = np.linspace(-5, 5, 256)
+    x_major_locator=MultipleLocator(1)
+    x_minor_locator=MultipleLocator(0.2)
+    y_major_locator=MultipleLocator(1)
+    y_minor_locator=MultipleLocator(0.2)
+    ax.xaxis.set_major_locator(x_major_locator)
+    ax.xaxis.set_minor_locator(x_minor_locator)
+    ax.yaxis.set_major_locator(y_major_locator)
+    ax.yaxis.set_minor_locator(y_minor_locator)
+    plt.tick_params(top='on', right='on', which='both')
+
+    gradient = np.linspace(-max_chi, max_chi, 256)
     gradient = np.vstack((gradient, gradient))
     img = ax.imshow(gradient, aspect='auto', cmap=my_cmap)
     fig.colorbar(img) # ah[-1])
-    plt.savefig(f"figs/{mode}2Dpull.png", dpi=200)
+    save_path = f"figs/{mode}2Dpull.png" # edit here
+    plt.savefig(save_path, dpi=200)
+    print("Done saving", save_path)
 
 
 def main():
     mode = "Bz" # edit here
-    data, phsp, bg = load_root_data("figure/variables_com.root") # edit here
+    data, phsp, bg = load_root_data("save/base_MD_Bz/figure/variables_com.root") # edit here
+    n_fp = 28 # edit here
 
     data_cut = np.array([data[f"m_{mode}R_DPi"]**2, data[f"m_{mode}R_DsPi"]**2])
-    adapter = AdaptiveBound(data_cut, [[2, 2]]*3)
+    adapter = AdaptiveBound(data_cut, [[2,2],[2,2],[2,2]])
     bound = adapter.get_bounds()
 
     phsp_cut = np.array([phsp[f"m_{mode}R_DPi_MC"]**2, phsp[f"m_{mode}R_DsPi_MC"]**2, phsp["MC_total_fit"]])
     # print(np.sum(bg["sideband_weights"])
     bg_cut = np.array([bg[f"m_{mode}R_DPi_sideband"]**2, bg[f"m_{mode}R_DsPi_sideband"]**2, bg["sideband_weights"]])
 
-    _, numbers = cal_chi2_config(adapter, data_cut, phsp_cut, bg_cut)
+    _, numbers = cal_chi2_config(adapter, data_cut, phsp_cut, bg_cut, n_fp)
     # print(numbers)
     draw_dalitz(data_cut, bound, numbers, mode)
 
 
 if __name__ == "__main__":
+    if not os.path.exists("figs"):
+        os.mkdir("figs")
     main()
