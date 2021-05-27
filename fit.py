@@ -66,8 +66,15 @@ def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500):
 
     # load data
     all_data = config.get_all_data()
-
     fit_results = []
+    '''if maxiter is 0:
+        try:
+            amp = config.get_amplitude()
+            amp.cached_fun = amp.decay_group.sum_amp # turn off use_tf_function
+        except:
+            amp_list = config.get_amplitudes()
+            for amp in amp_list:
+                amp.cached_fun = amp.decay_group.sum_amp # turn off use_tf_function'''
     for i in range(loop):
         # set initial parameters if have
         if config.set_params(init_params):
@@ -124,7 +131,7 @@ from frac_table import frac_table
 from tf_pwa.data import data_cut
 def write_some_results(config, fit_result, save_root=False):
     # plot partial wave distribution
-    config.plot_partial_wave(fit_result, plot_pull=True, save_root=save_root, smooth=False)
+    config.plot_partial_wave(fit_result, plot_pull=True, save_root=save_root, smooth=False, save_pdf=True)
 
     # calculate fit fractions
     phsp_noeff = config.get_phsp_noeff()
@@ -161,7 +168,7 @@ def write_some_results_combine(config, fit_result, save_root=False):
             res = ["D1_2007","D2_2460","D1_2600",["NR_DPi0","D0_2400o"],"X0"]
         res_curvestyle = ["b--","r","r--","g","purple"]'''
         c.plot_partial_wave(
-            fit_result, prefix="figure/", plot_pull=True, save_root=save_root, smooth=False
+            fit_result, prefix="figure/", plot_pull=True, save_root=save_root, smooth=False, save_pdf=True
         )
         '''cut_string = "(m>2.7)"
         data, phsp, bg, _ = c.get_all_data()
@@ -169,7 +176,7 @@ def write_some_results_combine(config, fit_result, save_root=False):
         phsp = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in phsp]
         bg = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in bg]
         #bg = [None, None]
-        c.plot_partial_wave(fit_result, prefix="figure/", plot_pull=True, smooth=False, data=data, phsp=phsp, bg=bg)
+        c.plot_partial_wave(fit_result, prefix="figure/", plot_pull=True, smooth=False, data=data, phsp=phsp, bg=bg, save_pdf=True)
         '''
 
     for it, config_i in enumerate(config.configs):
