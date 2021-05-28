@@ -50,6 +50,8 @@ def fit(config, config0, vm, method="BFGS", loop=100):
         try:
             config.reinit_params()
             vm.set("NR(DK)PS_a", np.random.uniform(0,1))
+            vm.set("A->Ds2_2573p.BDs2_2573p->C.DB->E.F_total_0r", 1)
+            vm.set("A->Ds2_2573p.BDs2_2573p->C.DB->E.F_total_0i", 0)
             vm.set("Ds1_2700_2860_mass1", 2.7083)
             vm.set("Ds1_2700_2860_mass2", 2.91)
             vm.set("Ds1_2700_2860_G1a", 0.063)
