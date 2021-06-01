@@ -126,15 +126,15 @@ def draw_dalitz(data_cut, bound, numbers, mode):
     gradient = np.vstack((gradient, gradient))
     img = ax.imshow(gradient, aspect='auto', cmap=my_cmap)
     fig.colorbar(img) # ah[-1])
-    save_path = f"figs/{mode}2Dpull.png" # edit here
+    save_path = f"figs/{mode}2Dpull.pdf" # edit here
     plt.savefig(save_path, dpi=200)
     print("Done saving", save_path)
 
 
 def main():
-    mode = "Bz" # edit here
-    data, phsp, bg = load_root_data("save/base_MD_Bz/figure/variables_com.root") # edit here
-    n_fp = 28 # edit here
+    mode = "Bp" # edit here
+    data, phsp, bg = load_root_data(f"save{mode}/baseZ1_spline_s/figure/variables_com.root") # edit here
+    n_fp = 32 # edit here
 
     data_cut = np.array([data[f"m_{mode}R_DPi"]**2, data[f"m_{mode}R_DsPi"]**2])
     adapter = AdaptiveBound(data_cut, [[2,2],[2,2],[2,2]])

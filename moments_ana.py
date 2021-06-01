@@ -31,7 +31,7 @@ def legendre_poly(x,L):
         return prefactor/128 * np.einsum("ij,i->j",xpoly,[6435,-12012,6930,-1260,35])
 
 
-def get_data(tree, tail="", weight=None, mode="Bp"): # edit
+def get_data(tree, tail="", weight=None, mode="Bp"):
     costheta = tree.get(f"{mode}R_DPi_D_cos_beta_{tail}").array()
     mDstD = tree.get(f"m_{mode}R_DPi{tail}").array()
     theta_ij = np.arccos(tree.get(f"{mode}R_DPi_D_cos_beta_{tail}").array())
@@ -67,7 +67,7 @@ def cal_moment_weight(theta, weight, order=0):
     ret = weight*pl#/np.sum(weight)
     return ret
 
-def plot_moment(data, fitted, order=0, prefix=""):
+def plot_moment(data, fitted, order=0, prefix="", mode="Bp"):
     w_data = cal_moment_weight(data[1], data[3], order)
     w_fitted = cal_moment_weight(fitted[1], fitted[3], order)
     plt.clf()
@@ -81,7 +81,10 @@ def plot_moment(data, fitted, order=0, prefix=""):
     hist2.draw(ax, label="fit")
     hist2.draw_error(ax)
     (hist1-hist2).draw_pull(ax2)
-    ax2.set_xlabel(r"$M_{D^-\pi^+}$/GeV") # edit
+    if mode == "Bz":
+        ax2.set_xlabel("$M_{\\bar D^0\\pi^-}^2$/GeV$^2$") # edit
+    elif mode == "Bp":
+        ax2.set_xlabel(r"$M_{D^-\pi^+}^2$/GeV$^2$")
     ax.set_ylabel(f"$\\langle Y_{order} \\rangle$")
     ax.minorticks_on()
     ax.tick_params(axis='y', which='minor', left=False)
@@ -92,7 +95,7 @@ def plot_moment(data, fitted, order=0, prefix=""):
 
 def main():
     mode = "Bp" # edit
-    with uproot.open("figure/variables_com.root") as f: # edit
+    with uproot.open(f"save{mode}/base_spline_s/figure/variables_pure.root") as f: # edit
         data = get_data(f.get("data"), "", "data_weights", mode)
         bg = get_data(f.get("sideband"), "_sideband", "sideband_weights", mode)
         fitted = get_data(f.get("fitted"), "_MC", "MC_total_fit", mode)
@@ -104,7 +107,7 @@ def main():
 
     plot1(data)
     for i in range(9):
-        plot_moment(sub_data, fitted, i)
+        plot_moment(sub_data, fitted, i, mode=mode)
         plt.title(f"moment {i}")
         plt.savefig(f"figs/{mode}_Dpi_moment_{i}.png")
     '''for i in range(8):

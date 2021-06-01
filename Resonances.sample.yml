@@ -37,6 +37,16 @@ D1_2600: { #JP not sure
     m_max: 2.70, m_min: 2.52, m0: 2.623, 
     g_max: 0.30, g_min: 0.01, g0: 0.139, 
 }
+D2_2600: { #JP not sure
+    J: 2, Par: 1, #float: mg,
+    m_max: 2.70, m_min: 2.52, m0: 2.623,
+    g_max: 0.30, g_min: 0.01, g0: 0.139,
+}
+D3_2600: { #JP not sure
+    J: 3, Par: -1, #float: mg,
+    m_max: 2.70, m_min: 2.52, m0: 2.623,
+    g_max: 0.30, g_min: 0.01, g0: 0.139,
+}
 
 D1_2840: {
     J: 1, Par: -1, #float: mg,
@@ -51,9 +61,9 @@ D3_2750: {
 }
 
 D0_2900: {
-    J: 0, Par: 1, float: mg,
+    J: 0, Par: 1, #float: mg,
     m0: 2.897, m_max: 3.1, m_min: 2.8,
-    g0: 0.19, g_max: 0.40, g_min: 0.001, 
+    g0: 0.19, g_max: 0.40, g_min: 0.001,
 }
 
 D1_3100: {
