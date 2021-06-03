@@ -131,7 +131,9 @@ from frac_table import frac_table
 from tf_pwa.data import data_cut
 def write_some_results(config, fit_result, save_root=False):
     # plot partial wave distribution
-    config.plot_partial_wave(fit_result, plot_pull=True, save_root=save_root, smooth=False, save_pdf=True)
+    res = None
+    res_curvestyle = {"D1_2007":"b--", "D1_2010":"b--", "Z0":"purple"}
+    config.plot_partial_wave(fit_result, plot_pull=True, save_root=save_root, smooth=False, save_pdf=True, res=res, res_curvestyle=res_curvestyle)
 
     # calculate fit fractions
     phsp_noeff = config.get_phsp_noeff()
@@ -161,14 +163,13 @@ def write_some_results_combine(config, fit_result, save_root=False):
 
     for i, c in enumerate(config.configs):
         res = None
-        res_curvestyle = None
         '''if i is 0:
             res = ["D1_2010","D2_2460","D1_2600",["NR_DPi0","D0_2400m"],"X0"]
         elif i is 1:
-            res = ["D1_2007","D2_2460","D1_2600",["NR_DPi0","D0_2400o"],"X0"]
-        res_curvestyle = ["b--","r","r--","g","purple"]'''
+            res = ["D1_2007","D2_2460","D1_2600",["NR_DPi0","D0_2400o"],"X0"]'''
+        res_curvestyle = {"D1_2007":"b--", "D1_2010":"b--", "Z0":"purple"}
         c.plot_partial_wave(
-            fit_result, prefix="figure/", plot_pull=True, save_root=save_root, smooth=False, save_pdf=True
+            fit_result, prefix="figure/", plot_pull=True, save_root=save_root, smooth=False, save_pdf=True, res=res, res_curvestyle=res_curvestyle
         )
         '''cut_string = "(m>2.7)"
         data, phsp, bg, _ = c.get_all_data()
