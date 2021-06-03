@@ -31,25 +31,31 @@ def legendre_poly(x,L):
         return prefactor/128 * np.einsum("ij,i->j",xpoly,[6435,-12012,6930,-1260,35])
 
 
-def get_data(tree, tail="", weight=None, mode="Bp"):
-    costheta = tree.get(f"{mode}R_DPi_D_cos_beta_{tail}").array()
-    mDstD = tree.get(f"m_{mode}R_DPi{tail}").array()
-    theta_ij = np.arccos(tree.get(f"{mode}R_DPi_D_cos_beta_{tail}").array())
+def get_data(tree, tail="", weight=None, mode="Bp", axis="DPi"):
+    if axis == "DPi": caxis = "DPi_D"
+    elif axis == "DsPi": caxis = "DsPi_Ds"
+    elif axis == "DDs": caxis = "DDs_D"
+    else: raise
+    costheta = tree.get(f"{mode}R_{caxis}_cos_beta_{tail}").array()
+    mass = tree.get(f"m_{mode}R_{axis}{tail}").array()
+    theta_ij = np.arccos(tree.get(f"{mode}R_{caxis}_cos_beta_{tail}").array())
     if weight is None:
-        weights = np.ones_like(mDstD)
+        weights = np.ones_like(mass)
     else:
         weights = tree.get(weight).array()
-    return np.stack([mDstD, theta_ij, costheta, weights])
-
+    return np.stack([mass, theta_ij, costheta, weights])
+'''
 def plot1(data):
     plt.clf()
     plt.scatter(data[2], data[0], s=1, c="black")
     plt.ylabel("M_(DPi)/GeV")
-    plt.xlabel(r"$\cos \theta$")
-    plt.title(r"$\cos \theta vs M(Dpi)$")
+    plt.xlabel("$\\cos \\theta$")
+    plt.title("$\\cos \\theta vs M(Dpi)$")
     plt.savefig("2d_m_theta.png")
-
-def data_sub(data, bg):
+'''
+def data_sub(data, bg=None):
+    if bg is None:
+        return data
     return np.stack([
         np.concatenate([data[0], bg[0]]),
         np.concatenate([data[1], bg[1]]),
@@ -67,7 +73,7 @@ def cal_moment_weight(theta, weight, order=0):
     ret = weight*pl#/np.sum(weight)
     return ret
 
-def plot_moment(data, fitted, order=0, prefix="", mode="Bp"):
+def plot_moment(data, fitted, order=0, prefix="", mode="Bp", axis="DPi"):
     w_data = cal_moment_weight(data[1], data[3], order)
     w_fitted = cal_moment_weight(fitted[1], fitted[3], order)
     plt.clf()
@@ -82,9 +88,19 @@ def plot_moment(data, fitted, order=0, prefix="", mode="Bp"):
     hist2.draw_error(ax)
     (hist1-hist2).draw_pull(ax2)
     if mode == "Bz":
-        ax2.set_xlabel("$M_{\\bar D^0\\pi^-}^2$/GeV$^2$") # edit
+        if axis == "DPi":
+            ax2.set_xlabel("$M_{\\bar D^0\\pi^-}^2$/GeV$^2$")
+        elif axis == "DsPi":
+            ax2.set_xlabel("$M_{D_s^+\\pi^-}^2$/GeV$^2$")
+        elif axis == "DDs":
+            ax2.set_xlabel("$M_{\\bar D^0D_s^+}^2$/GeV$^2$")
     elif mode == "Bp":
-        ax2.set_xlabel(r"$M_{D^-\pi^+}^2$/GeV$^2$")
+        if axis == "DPi":
+            ax2.set_xlabel(r"$M_{D^-\pi^+}^2$/GeV$^2$")
+        elif axis == "DsPi":
+            ax2.set_xlabel(r"$M_{D_s^+\pi^+}^2$/GeV$^2$")
+        elif axis == "DDs":
+            ax2.set_xlabel(r"$M_{D^-D_s^+}^2$/GeV$^2$")
     ax.set_ylabel(f"$\\langle Y_{order} \\rangle$")
     ax.minorticks_on()
     ax.tick_params(axis='y', which='minor', left=False)
@@ -94,22 +110,27 @@ def plot_moment(data, fitted, order=0, prefix="", mode="Bp"):
 
 
 def main():
-    mode = "Bp" # edit
-    with uproot.open(f"save{mode}/base_spline_s/figure/variables_pure.root") as f: # edit
-        data = get_data(f.get("data"), "", "data_weights", mode)
-        bg = get_data(f.get("sideband"), "_sideband", "sideband_weights", mode)
-        fitted = get_data(f.get("fitted"), "_MC", "MC_total_fit", mode)
+    mode = "Bz" # edit "Bz", "Bp"
+    axis = "DsPi" # edit "DPi", "DsPi", "DDs"
+    filename = f"save{mode}/baseZ0_spline_s/figure/variables_com.root" # edit
+    with uproot.open(filename) as f:
+        data = get_data(f.get("data"), "", "data_weights", mode, axis)
+        try:
+            bg = get_data(f.get("sideband"), "_sideband", "sideband_weights", mode, axis)
+        except:
+            bg = None
+        fitted = get_data(f.get("fitted"), "_MC", "MC_total_fit", mode, axis)
         
     sub_data = data_sub(data, bg)
     
     #cut1 = np.abs(sub_data[2]) > 0.5
     #cut2 = np.abs(fitted[2]) > 0.5
 
-    plot1(data)
+    #plot1(data)
     for i in range(9):
-        plot_moment(sub_data, fitted, i, mode=mode)
+        plot_moment(sub_data, fitted, i, mode=mode, axis=axis)
         plt.title(f"moment {i}")
-        plt.savefig(f"figs/{mode}_Dpi_moment_{i}.png")
+        plt.savefig(f"figs/{mode}_{axis}_moment_{i}.png")
     '''for i in range(8):
         plot_moment(sub_data[:,cut1], fitted[:,cut2], i)
         plt.title("moment {}: $|\\cos\\theta| > 0.5$".format(i))
