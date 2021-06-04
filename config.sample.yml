@@ -1,14 +1,16 @@
 ##### config.yml
+
 data:
     dat_order: [D, Ds, Pi]
     data: [["../dataDDspi/dat/B0toD0Dspi_Data_Run1.dat"], ["../dataDDspi/dat/B0toD0Dspi_Data_Run2.dat"],["../dataDDspi/dat/B0toD0_K3piDspi_Data_Run1.dat"], ["../dataDDspi/dat/B0toD0_K3piDspi_Data_Run2.dat"]]
+    #data_weight: ["../dataDDspi/dat/B0toD0Dspi_Data_Run1_Weight.dat", "../dataDDspi/dat/B0toD0Dspi_Data_Run2_Weight.dat","../dataDDspi/dat/B0toD0_K3piDspi_Data_Run1_Weight.dat", "../dataDDspi/dat/B0toD0_K3piDspi_Data_Run2_Weight.dat"]
+    #phsp: [["../dataDDspi/dat/B0toD0Dspi_MC_Noeff.dat"],["../dataDDspi/dat/B0toD0Dspi_MC_Noeff.dat"],["../dataDDspi/dat/B0toD0Dspi_MC_Noeff.dat"],["../dataDDspi/dat/B0toD0Dspi_MC_Noeff.dat"]]
     phsp: [["../dataDDspi/dat/B0toD0Dspi_MC_Run1.dat"], ["../dataDDspi/dat/B0toD0Dspi_MC_Run2.dat"],["../dataDDspi/dat/B0toD0_K3piDspi_MC_Run1.dat"], ["../dataDDspi/dat/B0toD0_K3piDspi_MC_Run2.dat"]]
     phsp_weight: ["../dataDDspi/dat/B0toD0Dspi_MC_Run1_Weight.dat", "../dataDDspi/dat/B0toD0Dspi_MC_Run2_Weight.dat","../dataDDspi/dat/B0toD0_K3piDspi_MC_Run1_Weight.dat", "../dataDDspi/dat/B0toD0_K3piDspi_MC_Run2_Weight.dat"]
     phsp_noeff: ["../dataDDspi/dat/B0toD0Dspi_MC_Noeff.dat"]
     bg: [["../dataDDspi/dat/B0toD0Dspi_BSB_Run1.dat"], ["../dataDDspi/dat/B0toD0Dspi_BSB_Run2.dat"],["../dataDDspi/dat/B0toD0_K3piDspi_BSB_Run1.dat"], ["../dataDDspi/dat/B0toD0_K3piDspi_BSB_Run2.dat"]]
-    bg_weight: [0.152417, 0.109351, 0.193378, 0.0833175]
-    #use_tf_function: True
-    #cached_int: True
+    bg_weight: [0.131039, 0.103967, 0.143792, 0.106173]
+    cached_amp: True
 
 
 decay:
@@ -17,10 +19,12 @@ decay:
         - [D1_2010, Ds, p_break: True, curve_style: "b--"]
         - [BzR_DDs, Pi, p_break: True]
         - [BzR_DsPi, D, p_break: True]
-        - [X0, D, p_break: True, curve_style: "purple"]
-        - [X1, D, p_break: True, curve_style: "magenta"]
-        - [X2, D, p_break: True, curve_style: "cyan"]
-        - [X0hist, D, p_break: True, curve_style: "purple"]
+        - [Z0, D, p_break: True, curve_style: "purple"]
+        - [Z1, D, p_break: True, curve_style: "magenta"]
+        - [Z2, D, p_break: True, curve_style: "cyan"]
+        - [Z3, D, p_break: True, curve_style: "cyan"]
+        - [Z0hist, D, p_break: True, curve_style: "purple"]
+        - [Z1hist, D, p_break: True, curve_style: "magenta"]
         - [NR_DPi0, Ds, p_break: True, curve_style: "g-"]
         - [NR_DPi1, Ds, p_break: True, curve_style: "b-"]
         - [DPi_S, Ds, p_break: True, curve_style: "g-"]
@@ -30,10 +34,12 @@ decay:
     D1_2010: [D, Pi]
     BzR_DDs: [D, Ds]
     BzR_DsPi: [Ds, Pi]
-    X0: [Ds, Pi]
-    X1: [Ds, Pi]
-    X2: [Ds, Pi]
-    X0hist: [Ds, Pi]
+    Z0: [Ds, Pi]
+    Z1: [Ds, Pi]
+    Z2: [Ds, Pi]
+    Z3: [Ds, Pi]
+    Z0hist: [Ds, Pi]
+    Z1hist: [Ds, Pi]
     NR_DPi0: [D, Pi]
     NR_DPi1: [D, Pi]
     DPi_S: [D, Pi]
@@ -59,18 +65,19 @@ particle:
     $include: Resonances.sample.yml
     BzR_DDs: []
     BzR_DsPi: []
-    X0: [] #{J: 0, Par: 1, float: mg, m0: 2.879, g0: 0.109, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
-    X1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
-    X2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
+    Z0: [] #{J: 0, Par: 1, float: mg, m0: 2.879, g0: 0.109, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    Z1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    Z2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
+    Z3: [] #{J: 3, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
     BzR_DPi:
-        - D2_2460
-        #- D0_2400m
-        - D1_2600
-        #- D1_2840
-        #- D1_3100
-        #- D3_2750
-        #- D2_3100
+        #- D0_2300m
         #- D0_2900
+        - D2_2460
+        - D1_2600
+        - D3_2750
+        - D1_2760
+        #- DJ_2640
+        #- DJ_3000
     D1_2010: {J: 1, Par: -1, m0: 2.01026, g0: 0.0000834}
 
     NR_DPi0: [] #{display: "NR(0+)(D0pi-)", J: 0, P: 1, mass: 2.4, model: exp2}
@@ -79,7 +86,8 @@ particle:
         #model: interp_hist, points: [1.95, 2.0, 2.05, 2.1, 2.15, 2.2, 2.25, 2.3, 2.35, 2.4, 2.42, 2.44, 2.46, 2.48, 2.5, 2.55, 2.6, 2.65, 2.7, 2.75, 2.85, 2.95, 3.05, 3.15, 3.25, 3.35]} #max_m: 3.35, min_m: 1.95, interp_N: 29}
     DPi_P: [] #{J: 1, P: -1, mass: 2.65, #model: interp_hist, max_m: 3.4, min_m: 2.0, interp_N: 15}
                 #model: spline_c, points: [1.95, 2.05, 2.15, 2.25, 2.35, 2.45, 2.55, 2.65, 2.75, 2.85, 2.95, 3.05, 3.15, 3.25, 3.4]}
-    X0hist: [] #{J: 0, P: 1, mass: 2.970, model: interp_hist, points: [2.581,2.6605,2.74,2.8195,2.899,2.9785,3.058,3.1375,3.217]}#[2.648, 2.729, 2.809, 2.890, 2.970, 3.051, 3.131, 3.212, 3.292]}
+    Z0hist: [] #{J: 0, P: 1, mass: 2.970, model: interp_hist, points: [2.690,2.756,2.822,2.888,2.954,3.020,3.086,3.151,3.217]}#[2.693,2.759,2.824,2.890,2.956,3.021,3.087,3.153,3.219]}
+    Z1hist: [] #{J: 1, P: -1, mass: 2.868, model: interp_hist, points: [2.518,2.609,2.700,2.791,2.881,2.972,3.063,3.154,3.245]}#[2.437,2.544,2.652,2.760,2.868,2.975,3.083,3.191,3.299]}
 
 # constrains for params [WIP]
 constrains:
@@ -133,21 +141,47 @@ plot:
 
 
 
+##### configC.yml
+
+data:
+    model: cfit
+    dat_order: [D, Ds, Pi]
+    bg_frac: [0.131039, 0.103967, 0.143792, 0.106173]
+    data_bg_value: ["../dataDDspi/dat_cfit/B0toD0Dspi_Data_Run1_value.dat", "../dataDDspi/dat_cfit/B0toD0Dspi_Data_Run2_value.dat", "../dataDDspi/dat_cfit/B0toD0_K3piDspi_Data_Run1_value.dat",  "../dataDDspi/dat_cfit/B0toD0_K3piDspi_Data_Run2_value.dat"]
+    phsp_bg_value: ["../dataDDspi/dat_cfit/B0toD0Dspi_MC_Run1_value.dat", "../dataDDspi/dat_cfit/B0toD0Dspi_MC_Run2_value.dat", "../dataDDspi/dat_cfit/B0toD0_K3piDspi_MC_Run1_value.dat",  "../dataDDspi/dat_cfit/B0toD0_K3piDspi_MC_Run2_value.dat"]
+    #data_eff_value: "toy_data/data_eff_value.dat"
+    #phsp_eff_value: "toy_data/phsp_eff_value.dat"
+    
+    data: [["../dataDDspi/dat/B0toD0Dspi_Data_Run1.dat"], ["../dataDDspi/dat/B0toD0Dspi_Data_Run2.dat"],["../dataDDspi/dat/B0toD0_K3piDspi_Data_Run1.dat"], ["../dataDDspi/dat/B0toD0_K3piDspi_Data_Run2.dat"]]
+    phsp: [["../dataDDspi/dat/B0toD0Dspi_MC_Run1.dat"], ["../dataDDspi/dat/B0toD0Dspi_MC_Run2.dat"],["../dataDDspi/dat/B0toD0_K3piDspi_MC_Run1.dat"], ["../dataDDspi/dat/B0toD0_K3piDspi_MC_Run2.dat"]]
+    phsp_weight: ["../dataDDspi/dat/B0toD0Dspi_MC_Run1_Weight.dat", "../dataDDspi/dat/B0toD0Dspi_MC_Run2_Weight.dat","../dataDDspi/dat/B0toD0_K3piDspi_MC_Run1_Weight.dat", "../dataDDspi/dat/B0toD0_K3piDspi_MC_Run2_Weight.dat"]
+    phsp_noeff: ["../dataDDspi/dat/B0toD0Dspi_MC_Noeff.dat"]
+    #use_tf_function: True
+    bg: [["../dataDDspi/dat_cfit/B0toD0Dspi_Run1_BKGsample.dat"], ["../dataDDspi/dat_cfit/B0toD0Dspi_Run2_BKGsample.dat"],["../dataDDspi/dat_cfit/B0toD0_K3piDspi_Run1_BKGsample.dat"], ["../dataDDspi/dat_cfit/B0toD0_K3piDspi_Run2_BKGsample.dat"]]
+    bg_weight: [0.0211211282740094, 0.07970803333333333, 0.005437684390105203, 0.031138509987893463]
+
+
+
+
+
+
 
 
 
 
 ##### config_Bp.yml
+
 data:
     dat_order: [D, Ds, Pi]
     data: [["../dataDDspi/dat/BptoDmDspi_Data_Run1.dat"], ["../dataDDspi/dat/BptoDmDspi_Data_Run2.dat"]]
+    #data_weight: ["../dataDDspi/dat/BptoDmDspi_Data_Run1_Weight.dat", "../dataDDspi/dat/BptoDmDspi_Data_Run2_Weight.dat"]
+    #phsp: [["../dataDDspi/dat/BptoDmDspi_MC_Noeff.dat"], ["../dataDDspi/dat/BptoDmDspi_MC_Noeff.dat"]]
     phsp: [["../dataDDspi/dat/BptoDmDspi_MC_Run1.dat"], ["../dataDDspi/dat/BptoDmDspi_MC_Run2.dat"]]
     phsp_weight: ["../dataDDspi/dat/BptoDmDspi_MC_Run1_Weight.dat", "../dataDDspi/dat/BptoDmDspi_MC_Run2_Weight.dat"]
     phsp_noeff: ["../dataDDspi/dat/BptoDmDspi_MC_Noeff.dat"]
     bg: [["../dataDDspi/dat/BptoDmDspi_BSB_Run1.dat"], ["../dataDDspi/dat/BptoDmDspi_BSB_Run2.dat"]]
-    bg_weight: [0.145735, 0.0915304]
-    #use_tf_function: True
-    #cached_int: True
+    bg_weight: [0.0861442, 0.0554937]
+    cached_amp: True
 
 
 decay:
@@ -156,10 +190,12 @@ decay:
         - [D1_2007, Ds, p_break: True, curve_style: "b--"]
         - [BpR_DDs, Pi, p_break: True]
         - [BpR_DsPi, D, p_break: True]
-        - [X0, D, p_break: True, curve_style: "purple"]
-        - [X1, D, p_break: True, curve_style: "magenta"]
-        - [X2, D, p_break: True, curve_style: "cyan"]
-        - [X0hist, D, p_break: True, curve_style: "purple"]
+        - [Z0, D, p_break: True, curve_style: "purple"]
+        - [Z1, D, p_break: True, curve_style: "magenta"]
+        - [Z2, D, p_break: True, curve_style: "cyan"]
+        - [Z3, D, p_break: True, curve_style: "cyan"]
+        - [Z0hist, D, p_break: True, curve_style: "purple"]
+        - [Z1hist, D, p_break: True, curve_style: "magenta"]
         - [NR_DPi0, Ds, p_break: True, curve_style: "g-"]
         - [NR_DPi1, Ds, p_break: True, curve_style: "b-"]
         - [DPi_S, Ds, p_break: True, curve_style: "g-"]
@@ -169,10 +205,12 @@ decay:
     D1_2007: [D, Pi, has_barrier_factor: False]
     BpR_DDs: [D, Ds]
     BpR_DsPi: [Ds, Pi]
-    X0: [Ds, Pi]
-    X1: [Ds, Pi]
-    X2: [Ds, Pi]
-    X0hist: [Ds, Pi]
+    Z0: [Ds, Pi]
+    Z1: [Ds, Pi]
+    Z2: [Ds, Pi]
+    Z3: [Ds, Pi]
+    Z0hist: [Ds, Pi]
+    Z1hist: [Ds, Pi]
     NR_DPi0: [D, Pi]
     NR_DPi1: [D, Pi]
     DPi_S: [D, Pi]
@@ -198,18 +236,19 @@ particle:
     $include: Resonances.sample.yml
     BpR_DDs: []
     BpR_DsPi: []
-    X0: [] #{J: 0, Par: 1, float: mg, m0: 2.879, g0: 0.109, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
-    X1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
-    X2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
+    Z0: [] #{J: 0, Par: 1, float: mg, m0: 2.879, g0: 0.109, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    Z1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    Z2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
+    Z3: [] #{J: 3, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
     BpR_DPi:
-        - D2_2460
-        #- D0_2400o
-        - D1_2600
-        #- D1_2840
-        #- D1_3100
-        #- D3_2750
-        #- D2_3100
+        #- D0_2300o
         #- D0_2900
+        - D2_2460
+        - D1_2600
+        - D3_2750
+        - D1_2760
+        #- DJ_2640
+        #- DJ_3000
     D1_2007: {J: 1, Par: -1, m0: 2.00685, g0: 0.0001, model: BW2007}
 
     NR_DPi0: [] #{display: "NR(0+)(D-pi+)", J: 0, P: 1, mass: 2.4, model: exp2}
@@ -218,7 +257,8 @@ particle:
         #model: interp_hist, points: [1.95, 2.0, 2.05, 2.1, 2.15, 2.2, 2.25, 2.3, 2.35, 2.4, 2.42, 2.44, 2.46, 2.48, 2.5, 2.55, 2.6, 2.65, 2.7, 2.75, 2.85, 2.95, 3.05, 3.15, 3.25, 3.35]} #max_m: 3.35, min_m: 1.95, interp_N: 29}
     DPi_P: [] #{J: 1, P: -1, mass: 2.65, #model: interp_hist, max_m: 3.4, min_m: 2.0, interp_N: 15}
                 #model: spline_c, points: [1.95, 2.05, 2.15, 2.25, 2.35, 2.45, 2.55, 2.65, 2.75, 2.85, 2.95, 3.05, 3.15, 3.25, 3.4]}
-    X0hist: [] #{J: 0, P: 1, mass: 2.959, model: interp_hist, points: [2.581,2.6605,2.74,2.8195,2.899,2.9785,3.058,3.1375,3.217]}#[2.648, 2.729, 2.809, 2.890, 2.970, 3.051, 3.131, 3.212, 3.292]}
+    Z0hist: [] #{J: 0, P: 1, mass: 2.970, model: interp_hist, points: [2.690,2.756,2.822,2.888,2.954,3.020,3.086,3.151,3.217]}#[2.693,2.759,2.824,2.890,2.956,3.021,3.087,3.153,3.219]}
+    Z1hist: [] #{J: 1, P: -1, mass: 2.868, model: interp_hist, points: [2.518,2.609,2.700,2.791,2.881,2.972,3.063,3.154,3.245]}#[2.437,2.544,2.652,2.760,2.868,2.975,3.083,3.191,3.299]}
 
 # constrains for params [WIP]
 constrains:
@@ -269,3 +309,24 @@ plot:
     #    m_BpR_DDs & m_BpR_DPi:
     #        display: "$M_{D^-D_s^+}^2$ vs $M_{D^-\\pi^+}^2$"
     #        plot_figs: ["data", "sideband"]
+
+
+
+##### configC_Bp.yml
+
+data:
+    model: cfit
+    dat_order: [D, Ds, Pi]
+    bg_frac: [0.0861442, 0.0554937]
+    data_bg_value: ["../dataDDspi/dat_cfit/BptoDmDspi_Data_Run1_value.dat", "../dataDDspi/dat_cfit/BptoDmDspi_Data_Run2_value.dat"]
+    phsp_bg_value: ["../dataDDspi/dat_cfit/BptoDmDspi_MC_Run1_value.dat", "../dataDDspi/dat_cfit/BptoDmDspi_MC_Run2_value.dat"]
+    #data_eff_value: "toy_data/data_eff_value.dat"
+    #phsp_eff_value: "toy_data/phsp_eff_value.dat"
+
+    data: [["../dataDDspi/dat/BptoDmDspi_Data_Run1.dat"], ["../dataDDspi/dat/BptoDmDspi_Data_Run2.dat"]]
+    phsp: [["../dataDDspi/dat/BptoDmDspi_MC_Run1.dat"], ["../dataDDspi/dat/BptoDmDspi_MC_Run2.dat"]]
+    phsp_weight: ["../dataDDspi/dat/BptoDmDspi_MC_Run1_Weight.dat", "../dataDDspi/dat/BptoDmDspi_MC_Run2_Weight.dat"]
+    phsp_noeff: ["../dataDDspi/dat/BptoDmDspi_MC_Noeff.dat"]
+    #use_tf_function: True
+    bg: [["../dataDDspi/dat_cfit/BptoDmDspi_Run1_BKGsample.dat"], ["../dataDDspi/dat_cfit/BptoDmDspi_Run2_BKGsample.dat"]]
+    bg_weight: [0.010895180049720324, 0.05000909288840262]

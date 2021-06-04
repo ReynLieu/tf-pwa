@@ -1,94 +1,105 @@
 
-D0_2400: { # different in Bp
+D0_2300: {
     J: 0, Par: 1, float: ,
-    m_sigma: 0.007, m_max: 2.45, m_min: 2.2, m0: 2.351, 
-    g_sigma: 0.017, g_max: 0.50, g_min: 0.01, g0: 0.230, 
-}
-D0_2400m: { 
-    J: 0, Par: 1, float: ,
-    m_sigma: 0.007, m_max: 2.45, m_min: 2.2, m0: 2.351, 
-    g_sigma: 0.017, g_max: 0.50, g_min: 0.01, g0: 0.230, 
-}
-D0_2400o: { 
-    J: 0, Par: 1, float: ,
-    m_sigma: 0.029, m_max: 2.45, m_min: 2.2, m0: 2.318, 
-    g_sigma: 0.04, g_max: 0.50, g_min: 0.01, g0: 0.267, 
+    m_sigma: 0.010, m_max: 2.45, m_min: 2.2, m0: 2.343,
+    g_sigma: 0.016, g_max: 0.50, g_min: 0.01, g0: 0.229,
 }
 
-D2_2460: { # different in Bp
-  J: 2, P: 1, m0: 2.4634, g0: 0.0474, 
-  #float: mg, #gauss_constr: mg,
-}
-D2_2460m: { # different in Bp
-  J: 2, P: 1, 
-  m_sigma: 0.0013, m0: 2.4654, 
-  g_sigma: 0.0012, g0: 0.0467, 
-  #float: mg, #gauss_constr: mg,
-}
-D2_2460o: {
-  J: 2, P: 1, 
-  m_sigma: 0.0004, m0: 2.4607, 
-  g_sigma: 0.0011, g0: 0.0475, 
-  #float: mg, #gauss_constr: mg,
+D2_2460: {
+    J: 2, P: 1, m0: 2.4611, g0: 0.0473,
+    m_sigma: 0.0007, g_sigma: 0.0008,
+    #float: mg, #gauss_constr: mg,
 }
 
-D1_2600: { #JP not sure
+D1_2600: {
     J: 1, Par: -1, #float: mg,
-    m_max: 2.70, m_min: 2.52, m0: 2.623, 
-    g_max: 0.30, g_min: 0.01, g0: 0.139, 
-}
-D2_2600: { #JP not sure
-    J: 2, Par: 1, #float: mg,
-    m_max: 2.70, m_min: 2.52, m0: 2.623,
-    g_max: 0.30, g_min: 0.01, g0: 0.139,
-}
-D3_2600: { #JP not sure
-    J: 3, Par: -1, #float: mg,
-    m_max: 2.70, m_min: 2.52, m0: 2.623,
-    g_max: 0.30, g_min: 0.01, g0: 0.139,
-}
-
-D1_2840: {
-    J: 1, Par: -1, #float: mg,
-    m_max: 2.9, m_min: 2.7, m0: 2.836, 
-    g_max: 0.30, g_min: 0.01, g0: 0.15, 
+    m_max: 2.70, m_min: 2.52, m0: 2.627,
+    g_max: 0.30, g_min: 0.01, g0: 0.141,
 }
 
 D3_2750: {
-    J: 3, Par: -1, float: mg,
-    m0: 2.7635, m_sigma: 0.0034, m_max: 3.3, m_min: 2.5, 
-    g0: 0.066, g_sigma: 0.005, g_max: 0.40, g_min: 0.01, 
+    J: 3, Par: -1, #float: mg,
+    m_sigma: 0.0032, m_max: 3.3, m_min: 2.5, m0: 2.7631,
+    g_sigma: 0.005, g_max: 0.40, g_min: 0.01, g0: 0.066,
 }
 
+D1_2760: {
+    J: 1, Par: -1, #float: mg,
+    m_sigma: 0.022, m_max: 3.3, m_min: 2.5, m0: 2.781,
+    g_sigma: 0.040, g_max: 0.40, g_min: 0.01, g0: 0.177,
+}
+
+DJ_2640: {
+    J: 1, Par: -1, #float: mg, gauss_constr: mg,
+    m_max: 2.8, m_min: 2.5, m0: 2.637,
+    g_max: 0.10, g_min: 0.001, g0: 0.015,
+}
+
+DJ_3000: {
+    J: 2, Par: 1, #float: mg, gauss_constr: mg,
+    m_sigma: 0.060, m_max: 3.3, m_min: 2.9, m0: 3.214,
+    g_sigma: 0.080, g_max: 0.40, g_min: 0.01, g0: 0.186,
+}
+
+
+# theoretical prediction
 D0_2900: {
     J: 0, Par: 1, #float: mg,
-    m0: 2.897, m_max: 3.1, m_min: 2.8,
-    g0: 0.19, g_max: 0.40, g_min: 0.001,
+    m_max: 3.1, m_min: 2.8, m0: 2.897,
+    g_max: 0.40, g_min: 0.001, g0: 0.19,
 }
 
-D1_3100: {
-    J: 1, Par: -1, #float: mg,
-    m0: 3.10, m_max: 3.3, m_min: 2.9,
-    g0: 0.20, g_max: 0.40, g_min: 0.01, 
-}
-
-D2_3100: {
-    J: 2, Par: 1, float: mg,
-    m0: 3.10, m_max: 3.3, m_min: 2.8,
-    g0: 0.20, g_max: 0.40, g_min: 0.01, 
-}
-
-
-# not usable
+# random search
 Dstar: {
     J: 1, Par: -1,
-    m0: 2.00685, # D1_2007
-    g0: 0.0000834, # D1_2010
-    model: default,
+    m_max: 3.35, m_min: 2.0, m0: 2.6,
+    g_max: 0.40, g_min: 0.001, g0: 0.1,
+    float: mg,
+}
+DsPi: {
+    J: 1, Par: -1,
+    m_max: 3.45, m_min: 2.05, m0: 2.8,
+    g_max: 0.40, g_min: 0.001, g0: 0.1,
+    float: mg,
+}
+DDs: {
+    J: 1, Par: -1,
+    m_max: 5.2, m_min: 3.8, m0: 4.6,
+    g_max: 0.40, g_min: 0.001, g0: 0.1,
+    float: mg,
 }
 
-D1_2420: { # prefer 1+
-    J: 1, Par: -1, 
-    m0: 2.4232, m_sigma: 0.0024, 
-    g0: 0.025, g_sigma: 0.006, 
+
+# not used
+D0_2300m: { # not in PDG2021
+    J: 0, Par: 1, float: ,
+    m_sigma: 0.007, m_max: 2.45, m_min: 2.2, m0: 2.351,
+    g_sigma: 0.017, g_max: 0.50, g_min: 0.01, g0: 0.230,
+}
+D0_2300o: { # not in PDG2021
+    J: 0, Par: 1, float: ,
+    m_sigma: 0.029, m_max: 2.45, m_min: 2.2, m0: 2.318,
+    g_sigma: 0.04, g_max: 0.50, g_min: 0.01, g0: 0.267,
+}
+
+D2_2460m: { # not in PDG2021
+  J: 2, P: 1,
+  m_sigma: 0.0013, m0: 2.4654,
+  g_sigma: 0.0012, g0: 0.0467,
+}
+D2_2460o: { # not in PDG2021
+  J: 2, P: 1,
+  m_sigma: 0.0004, m0: 2.4607,
+  g_sigma: 0.0011, g0: 0.0475,
+}
+
+D2_2600: { # not in PDG2021
+    J: 2, Par: 1, #float: mg,
+    m_max: 2.70, m_min: 2.52, m0: 2.627,
+    g_max: 0.30, g_min: 0.01, g0: 0.141,
+}
+D3_2600: { # not in PDG2021
+    J: 3, Par: -1, #float: mg,
+    m_max: 2.70, m_min: 2.52, m0: 2.627,
+    g_max: 0.30, g_min: 0.01, g0: 0.141,
 }

@@ -98,7 +98,7 @@ def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500):
         fit_results.append(fit_result)
         # reset parameters
         try:
-            config.reinit_params()
+            config.reinit_params() # a bug found when loop>1: for variable with bound, the initial NLL does not have bound transform, but the following fit has no problem
         except Exception as e:
             print(e)
 
