@@ -32,10 +32,13 @@ def plot_partial_wave(
     res=None,
     save_root=False,
     show_nll=True,
+    res_curvestyle=None,
     **kwargs
 ):
     if params is None:
         params = {}
+    if res_curvestyle is None:
+        res_curvestyle = {}
     nll = None
     if show_nll:
         if hasattr(params, "min_nll"):
@@ -63,6 +66,9 @@ def plot_partial_wave(
         for i in range(len(self.full_decay.chains)):
             name_i, curve_style = self.get_chain_property(i, False)
             label, curve_style = self.get_chain_property(i, True)
+            name = label.split(" ")[0]
+            if name in res_curvestyle and res_curvestyle[name]:
+                curve_style = res_curvestyle[name]
             chain_property.append([i, name_i, label, curve_style])
     else:
         for i, name in enumerate(res):
@@ -73,7 +79,11 @@ def plot_partial_wave(
             else:
                 display = "{ " + ",\n  ".join([str(i) for i in name]) + " }"
             name_i = "_".join([str(i) for i in name])
-            chain_property.append([i, name_i, display, None])
+            if name_i in res_curvestyle and res_curvestyle[name_i]:
+                curve_style = res_curvestyle[name_i]
+            else:
+                curve_style = None
+            chain_property.append([i, name_i, display, curve_style])
     plot_var_dic = {}
     for conf in self.plot_params.get_params():
         name = conf.get("name")
@@ -576,7 +586,6 @@ def _plot_partial_wave(
         bg_dict,
         prefix,
         plot_var_dic,
-        chain_property,
         plot_delta=plot_delta,
         plot_pull=plot_pull,
         save_pdf=save_pdf,
@@ -598,7 +607,6 @@ def _2d_plot(
     bg_dict,
     prefix,
     plot_var_dic,
-    chain_property,
     plot_delta=False,
     plot_pull=False,
     save_pdf=False,
