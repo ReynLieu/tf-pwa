@@ -185,7 +185,7 @@ def gen_weigths_for_cfit(mode, config):
 
 
 def sig_test(sfit=True, cfit=True):
-    param_file = "toystudy/toyPars.json"
+    param_file = "toystudy/params/base_s.json"
     Sconfig = MultiConfig(["toystudy/StoyBz.yml", "toystudy/StoyBp.yml"], total_same=True)
     Sconfig.set_params(param_file)
     ampBz, ampBp = Sconfig.get_amplitudes()
