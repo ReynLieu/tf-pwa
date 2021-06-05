@@ -109,6 +109,7 @@ def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500):
                 fit_result = i
 
     config.set_params(fit_result.params)
+    print("\n ##### The best result:")
     json_print(fit_result.params)
     fit_result.save_as("final_params.json")
 
