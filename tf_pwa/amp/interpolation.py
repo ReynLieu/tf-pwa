@@ -43,7 +43,11 @@ class InterpolationParticle(Particle):
 
     def get_amp(self, data, *args, **kwargs):
         m = data["m"]
+        #m = np.linspace(2,3.2,300) # for drawing on complex plane
         fm = self.interp(m)
+        '''print("$$$",fm.numpy().real.tolist())
+        print("$$$",fm.numpy().imag.tolist())
+        exit()'''
         return fm
 
     def n_points(self):
