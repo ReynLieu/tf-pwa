@@ -136,28 +136,6 @@ def gen_toyBp(amp):
     gen_data(amp, ndata, mcfile=mcfile, genfile=genfile, Poisson_fluc=True, Nbg=nbg, wbg=wbg, bgfile=bgfile)
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
 
-
-def fit_null(config):
-    #config.get_amplitudes()[0].vm.rp2xy_all()
-    fit_result = config.fit(batch=150000, method="BFGS")
-    return fit_result
-
-def fit_Z(config, params, loop=1):
-    config.set_params(params)
-    config.set_params({"B->Z0.DZ0->Ds.Pi_total_0r": 0})
-    frt = config.fit(batch=150000, method="BFGS")
-    min_nll = frt.min_nll
-    for i in range(loop-1):
-        config.reinit_params()
-        config.set_params(params)
-        frt = config.fit(batch=150000, method="BFGS")
-        if min_nll - frt.min_nll > 1e-6:
-            print("$$$New Min found")
-            min_nll = frt.min_nll
-            frt = frt
-    return frt
-
-
 def gen_weigths_for_cfit(mode, config):
     if mode == "Bz":
         channels = ["B0toD0Dspi_Run1", "B0toD0Dspi_Run2", "B0toD0_K3piDspi_Run1", "B0toD0_K3piDspi_Run2"]
@@ -184,9 +162,33 @@ def gen_weigths_for_cfit(mode, config):
         np.savetxt(save_file, wbkg/weff)
 
 
-def sig_test(sfit=True, cfit=True):
-    param_file = "toystudy/params/base_s.json"
-    Sconfig = MultiConfig(["toystudy/StoyBz.yml", "toystudy/StoyBp.yml"], total_same=True)
+def fit_null(config):
+    #config.get_amplitudes()[0].vm.rp2xy_all()
+    fit_result = config.fit(batch=150000, method="BFGS")
+    return fit_result
+
+def fit_Z(config, params, ZJ=0, loop=1):
+    config.set_params(params)
+    if ZJ == 0:
+        config.set_params({"B->Z0.DZ0->Ds.Pi_total_0r": 0})
+    elif ZJ == 1:
+        config.set_params({"B->Z1.DZ1->Ds.Pi_total_0r": 0})
+    frt = config.fit(batch=150000, method="BFGS")
+    min_nll = frt.min_nll
+    for i in range(loop-1):
+        config.reinit_params()
+        config.set_params(params)
+        frt = config.fit(batch=150000, method="BFGS")
+        if min_nll - frt.min_nll > 1e-6:
+            print("$$$New Min found")
+            min_nll = frt.min_nll
+            frt = frt
+    return frt
+
+def sig_test(sfit=True, cfit=True, null="", alternative="Z0", param_file=None, fitloop=1):
+    if param_file is None:
+        param_file = f"toystudy/params/base{null}_s.json"
+    Sconfig = MultiConfig([f"toystudy/StoyBz{null}.yml", f"toystudy/StoyBp{null}.yml"], total_same=True)
     Sconfig.set_params(param_file)
     ampBz, ampBp = Sconfig.get_amplitudes()
     gen_toyBz(ampBz)
@@ -197,20 +199,26 @@ def sig_test(sfit=True, cfit=True):
         print("### Null Sfit")
         Sfr0 = fit_null(Sconfig)
         print("### Alternative Sfit")
-        SconfigZ = MultiConfig(["toystudy/StoyBzZ.yml", "toystudy/StoyBpZ.yml"], total_same=True)
-        SfrZ = fit_Z(SconfigZ, Sfr0.params, loop=1)
+        SconfigZ = MultiConfig([f"toystudy/StoyBz{alternative}.yml", f"toystudy/StoyBp{alternative}.yml"], total_same=True)
+        if null == "" or null == "Z1":
+            SfrZ = fit_Z(SconfigZ, Sfr0.params, ZJ=0, loop=fitloop)
+        elif null == "Z0":
+            SfrZ = fit_Z(SconfigZ, Sfr0.params, ZJ=1, loop=fitloop)
         Sdnll = Sfr0.min_nll - SfrZ.min_nll
 
     if cfit:
         print("### Null Cfit")
-        Cconfig = MultiConfig(["toystudy/CtoyBz.yml", "toystudy/CtoyBp.yml"], total_same=True)
+        Cconfig = MultiConfig([f"toystudy/CtoyBz{null}.yml", f"toystudy/CtoyBp{null}.yml"], total_same=True)
         gen_weigths_for_cfit("Bz", Sconfig.configs[0]) # only for access to data and phsp
         gen_weigths_for_cfit("Bp", Sconfig.configs[1])
         Cconfig.set_params(param_file)
         Cfr0 = fit_null(Cconfig)
         print("### Alternative Cfit")
-        CconfigZ = MultiConfig(["toystudy/CtoyBzZ.yml", "toystudy/CtoyBpZ.yml"], total_same=True)
-        CfrZ = fit_Z(CconfigZ, Cfr0.params, loop=1)
+        CconfigZ = MultiConfig([f"toystudy/CtoyBz{alternative}.yml", f"toystudy/CtoyBp{alternative}.yml"], total_same=True)
+        if null == "" or null == "Z1":
+            CfrZ = fit_Z(CconfigZ, Cfr0.params, ZJ=0, loop=fitloop)
+        elif null == "Z0":
+            CfrZ = fit_Z(CconfigZ, Cfr0.params, ZJ=1, loop=fitloop)
         Cdnll = Cfr0.min_nll - CfrZ.min_nll
 
     return Sdnll, Cdnll
@@ -221,7 +229,7 @@ def main(Ntoy):
     CdNLL = []
     for i in range(Ntoy):
         print("##### Start toy {}".format(i))
-        Sdnll, Cdnll = sig_test(sfit=True, cfit=True)
+        Sdnll, Cdnll = sig_test(sfit=True, cfit=True, null="Z0", alternative="Z01", param_file="toystudy/params/baseZ0_c.json") # edit
         print("$$$$$dnll:", Sdnll, Cdnll)
         SdNLL.append(Sdnll)
         CdNLL.append(Cdnll)
@@ -232,7 +240,7 @@ def main(Ntoy):
 if __name__ == "__main__":
     if not os.path.exists("toystudy/toy"):
         os.mkdir("toystudy/toy")
-    SdNLL, CdNLL = main(100)
+    SdNLL, CdNLL = main(100) # usually it goes OOM before reach the 100 times
     print(f"########## deltaNLL for Sfit:\n{SdNLL}")
     print(f"########## deltaNLL for Cfit:\n{CdNLL}")
 
