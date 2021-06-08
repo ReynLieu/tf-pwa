@@ -156,7 +156,7 @@ data:
     phsp: [["../dataDDspi/dat/B0toD0Dspi_MC_Run1.dat"], ["../dataDDspi/dat/B0toD0Dspi_MC_Run2.dat"],["../dataDDspi/dat/B0toD0_K3piDspi_MC_Run1.dat"], ["../dataDDspi/dat/B0toD0_K3piDspi_MC_Run2.dat"]]
     phsp_weight: ["../dataDDspi/dat/B0toD0Dspi_MC_Run1_Weight.dat", "../dataDDspi/dat/B0toD0Dspi_MC_Run2_Weight.dat","../dataDDspi/dat/B0toD0_K3piDspi_MC_Run1_Weight.dat", "../dataDDspi/dat/B0toD0_K3piDspi_MC_Run2_Weight.dat"]
     phsp_noeff: ["../dataDDspi/dat/B0toD0Dspi_MC_Noeff.dat"]
-    #use_tf_function: True
+    cached_amp: True
     bg: [["../dataDDspi/dat_cfit/B0toD0Dspi_Run1_BKGsample.dat"], ["../dataDDspi/dat_cfit/B0toD0Dspi_Run2_BKGsample.dat"],["../dataDDspi/dat_cfit/B0toD0_K3piDspi_Run1_BKGsample.dat"], ["../dataDDspi/dat_cfit/B0toD0_K3piDspi_Run2_BKGsample.dat"]]
     bg_weight: [0.0211211282740094, 0.07970803333333333, 0.005437684390105203, 0.031138509987893463]
 
@@ -327,6 +327,6 @@ data:
     phsp: [["../dataDDspi/dat/BptoDmDspi_MC_Run1.dat"], ["../dataDDspi/dat/BptoDmDspi_MC_Run2.dat"]]
     phsp_weight: ["../dataDDspi/dat/BptoDmDspi_MC_Run1_Weight.dat", "../dataDDspi/dat/BptoDmDspi_MC_Run2_Weight.dat"]
     phsp_noeff: ["../dataDDspi/dat/BptoDmDspi_MC_Noeff.dat"]
-    #use_tf_function: True
+    cached_amp: True
     bg: [["../dataDDspi/dat_cfit/BptoDmDspi_Run1_BKGsample.dat"], ["../dataDDspi/dat_cfit/BptoDmDspi_Run2_BKGsample.dat"]]
     bg_weight: [0.010895180049720324, 0.05000909288840262]
