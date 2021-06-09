@@ -374,12 +374,10 @@ def _plot_partial_wave(
     colors = [
         "red",
         "orange",
-        "purple",
-        "springgreen",
-        "y",
-        "green",
-        "blue",
         "c",
+        "salmon",
+        "lightskyblue"
+        "peru",
     ]
     linestyles = ["-", "--", "-.", ":"]
 

@@ -169,15 +169,15 @@ def fit_null(config):
 
 def fit_Z(config, params, ZJ=0, loop=1):
     config.set_params(params)
-    if ZJ == 0:
-        config.set_params({"B->Z0.DZ0->Ds.Pi_total_0r": 0})
-    elif ZJ == 1:
-        config.set_params({"B->Z1.DZ1->Ds.Pi_total_0r": 0})
+    config.set_params({f"B->Z{ZJ}.DZ{ZJ}->Ds.Pi_total_0r": 0})
     frt = config.fit(batch=150000, method="BFGS")
     min_nll = frt.min_nll
     for i in range(loop-1):
         config.reinit_params()
         config.set_params(params)
+        config.set_params({f"Z{ZJ}_mass": 2.9})
+        config.set_params({f"Z{ZJ}_width": 0.15})
+        config.set_params({f"B->Z{ZJ}.DZ{ZJ}->Ds.Pi_total_0r": 0})
         frt = config.fit(batch=150000, method="BFGS")
         if min_nll - frt.min_nll > 1e-6:
             print("$$$New Min found")

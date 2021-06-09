@@ -130,10 +130,10 @@ def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500):
 
 from frac_table import frac_table
 from tf_pwa.data import data_cut
+res_curvestyle = {"D0_2300":"lime", "D0_2900":"y"}
 def write_some_results(config, fit_result, save_root=False):
     # plot partial wave distribution
     res = None
-    res_curvestyle = {"D1_2007":"b--", "D1_2010":"b--", "Z0":"purple"}
     config.plot_partial_wave(fit_result, plot_pull=True, save_root=save_root, smooth=False, save_pdf=True, res=res, res_curvestyle=res_curvestyle)
 
     # calculate fit fractions
@@ -157,7 +157,6 @@ def write_some_results(config, fit_result, save_root=False):
     frac_table(fit_frac_string)
     # chi2, ndf = config.cal_chi2(mass=["R_BC", "R_CD"], bins=[[2,2]]*4)
 
-
 def write_some_results_combine(config, fit_result, save_root=False):
 
     from tf_pwa.applications import fit_fractions
@@ -168,7 +167,6 @@ def write_some_results_combine(config, fit_result, save_root=False):
             res = ["D1_2010","D2_2460","D1_2600",["NR_DPi0","D0_2400m"],"X0"]
         elif i is 1:
             res = ["D1_2007","D2_2460","D1_2600",["NR_DPi0","D0_2400o"],"X0"]'''
-        res_curvestyle = {"D1_2007":"b--", "D1_2010":"b--", "Z0":"purple"}
         c.plot_partial_wave(
             fit_result, prefix="figure/", plot_pull=True, save_root=save_root, smooth=False, save_pdf=True, res=res, res_curvestyle=res_curvestyle
         )

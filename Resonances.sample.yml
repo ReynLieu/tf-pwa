@@ -1,8 +1,8 @@
 
 D0_2300: {
-    J: 0, Par: 1, float: ,
-    m_sigma: 0.010, m_max: 2.45, m_min: 2.2, m0: 2.343,
-    g_sigma: 0.016, g_max: 0.50, g_min: 0.01, g0: 0.229,
+    J: 0, Par: 1, #float: mg, #gauss_constr: mg,
+    m_sigma: 0.010, m_max: 2.6, m_min: 2.2, m0: 2.343,
+    g_sigma: 0.016, g_max: 1, g_min: 0.01, g0: 0.229,
 }
 
 D2_2460: {
@@ -12,9 +12,9 @@ D2_2460: {
 }
 
 D1_2600: {
-    J: 1, Par: -1, #float: mg,
-    m_max: 2.70, m_min: 2.52, m0: 2.627,
-    g_max: 0.30, g_min: 0.01, g0: 0.141,
+    J: 1, Par: -1, #float: mg, gauss_constr: mg,
+    m_sigma: 0.010, m_max: 2.70, m_min: 2.52, m0: 2.627,
+    g_sigma: 0.023, g_max: 0.30, g_min: 0.01, g0: 0.141,
 }
 
 D3_2750: {
@@ -36,7 +36,7 @@ DJ_2640: {
 }
 
 DJ_3000: {
-    J: 2, Par: 1, #float: mg, gauss_constr: mg,
+    J: 4, Par: 1, #float: mg, gauss_constr: mg,
     m_sigma: 0.060, m_max: 3.3, m_min: 2.9, m0: 3.214,
     g_sigma: 0.080, g_max: 0.40, g_min: 0.01, g0: 0.186,
 }
@@ -44,9 +44,9 @@ DJ_3000: {
 
 # theoretical prediction
 D0_2900: {
-    J: 0, Par: 1, #float: mg,
-    m_max: 3.1, m_min: 2.8, m0: 2.897,
-    g_max: 0.40, g_min: 0.001, g0: 0.19,
+    J: 0, Par: 1, float: g,
+    m_max: 3.1, m_min: 2.7, m0: 2.9,
+    g_max: 0.60, g_min: 0.001, g0: 0.15,
 }
 
 # random search
