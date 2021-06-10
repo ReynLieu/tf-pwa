@@ -40,7 +40,7 @@ class latex_out(object):
                 fracv = float(fracv)*100; error = float(error)*100
                 fracv, error = error_print(fracv, error).split("±")
                 fracv = float(fracv); error = float(error)
-                if fracv>=0.001:
+                if fracv>=0.1:
                     frac =f"${fracv}\pm{error}$"
                 else:
                     frac = "0.0"
