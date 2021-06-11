@@ -64,7 +64,9 @@ particle:
             P: -1
     $include: Resonances.sample.yml
     BzR_DDs: []
+        #- DDs
     BzR_DsPi: []
+        #- DsPi
     Z0: [] #{J: 0, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.001, g_max: 0.5,}
@@ -78,6 +80,7 @@ particle:
         #- D1_2760
         #- DJ_2640
         #- DJ_3000
+        #- Dstar
     D1_2010: {J: 1, Par: -1, m0: 2.01026, g0: 0.0000834}
 
     NR_DPi0: [] #{display: "NR(0+)(D0pi-)", J: 0, P: 1, mass: 2.4, model: exp2}
@@ -235,7 +238,9 @@ particle:
             P: -1
     $include: Resonances.sample.yml
     BpR_DDs: []
+        #- DDs
     BpR_DsPi: []
+        #- DsPi
     Z0: [] #{J: 0, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.001, g_max: 0.5,}
@@ -249,6 +254,7 @@ particle:
         #- D1_2760
         #- DJ_2640
         #- DJ_3000
+        #- Dstar
     D1_2007: {J: 1, Par: -1, m0: 2.00685, g0: 0.0001, model: BW2007}
 
     NR_DPi0: [] #{display: "NR(0+)(D-pi+)", J: 0, P: 1, mass: 2.4, model: exp2}
