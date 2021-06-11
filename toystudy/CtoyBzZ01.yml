@@ -63,8 +63,8 @@ particle:
     $include: Resonances.sample.yml
     BzR_DDs: []
     BzR_DsPi: []
-    Z0: [] #{J: 0, Par: 1, float: mg, m0: 2.879, g0: 0.109, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
-    Z1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    Z0: {J: 0, Par: 1, float: mg, m0: 2.879, g0: 0.109, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    Z1: {J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
     Z3: [] #{J: 3, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
     BzR_DPi:

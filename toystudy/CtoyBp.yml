@@ -8,7 +8,7 @@ data:
 
     data: [["toystudy/toy/BpData1.dat"], ["toystudy/toy/BpData2.dat"]]
     phsp: [["toystudy/toy/BpMC1.dat"], ["toystudy/toy/BpMC2.dat"]]
-    #use_tf_function: True
+    cached_amp: True
 
 
 decay:

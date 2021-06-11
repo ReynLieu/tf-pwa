@@ -2,21 +2,21 @@
 data:
     model: cfit
     dat_order: [D, Ds, Pi]
-    bg_frac: [0.131039, 0.103967, 0.143792, 0.106173]
-    data_bg_value: ["toystudy/toy/BzData1_value.dat", "toystudy/toy/BzData2_value.dat", "toystudy/toy/BzData3_value.dat",  "toystudy/toy/BzData4_value.dat"]
-    phsp_bg_value: ["toystudy/toy/BzMC1_value.dat", "toystudy/toy/BzMC2_value.dat", "toystudy/toy/BzMC3_value.dat",  "toystudy/toy/BzMC4_value.dat"]
-    
-    data: [["toystudy/toy/BzData1.dat"], ["toystudy/toy/BzData2.dat"],["toystudy/toy/BzData3.dat"], ["toystudy/toy/BzData4.dat"]]
-    phsp: [["toystudy/toy/BzMC1.dat"], ["toystudy/toy/BzMC2.dat"],["toystudy/toy/BzMC3.dat"], ["toystudy/toy/BzMC4.dat"]]
+    bg_frac: [0.0861442, 0.0554937]
+    data_bg_value: ["toystudy/toy/BpData1_value.dat", "toystudy/toy/BpData2_value.dat"]
+    phsp_bg_value: ["toystudy/toy/BpMC1_value.dat", "toystudy/toy/BpMC2_value.dat"]
+
+    data: [["toystudy/toy/BpData1.dat"], ["toystudy/toy/BpData2.dat"]]
+    phsp: [["toystudy/toy/BpMC1.dat"], ["toystudy/toy/BpMC2.dat"]]
     cached_amp: True
 
 
 decay:
     B:
-        - [BzR_DPi, Ds, p_break: True]
-        - [D1_2010, Ds, p_break: True, curve_style: "b--"]
-        - [BzR_DDs, Pi, p_break: True]
-        - [BzR_DsPi, D, p_break: True]
+        - [BpR_DPi, Ds, p_break: True]
+        - [D1_2007, Ds, p_break: True, curve_style: "b--"]
+        - [BpR_DDs, Pi, p_break: True]
+        - [BpR_DsPi, D, p_break: True]
         - [Z0, D, p_break: True, curve_style: "purple"]
         - [Z1, D, p_break: True, curve_style: "magenta"]
         - [Z2, D, p_break: True, curve_style: "cyan"]
@@ -28,10 +28,10 @@ decay:
         - [DPi_S, Ds, p_break: True, curve_style: "g-"]
         - [DPi_P, Ds, p_break: True, curve_style: "b-"]
 
-    BzR_DPi: [D, Pi]
-    D1_2010: [D, Pi]
-    BzR_DDs: [D, Ds]
-    BzR_DsPi: [Ds, Pi]
+    BpR_DPi: [D, Pi]
+    D1_2007: [D, Pi, has_barrier_factor: False]
+    BpR_DDs: [D, Ds]
+    BpR_DsPi: [Ds, Pi]
     Z0: [Ds, Pi]
     Z1: [Ds, Pi]
     Z2: [Ds, Pi]
@@ -46,29 +46,29 @@ decay:
 
 particle:
     $top:
-        B: # Bz = 5.27963
+        B: # Bp = 5.27934
             J: 0
             P: -1
     # final particles
     $finals:
-        D: # Dz = 1.86483
+        D: # Dm = 1.86965
             J: 0
             P: -1
         Ds: # Dsp = 1.96834
             J: 0
             P: -1
-        Pi: # pim = 0.13957039
+        Pi: # pip = 0.13957039
             J: 0
             P: -1
     $include: Resonances.sample.yml
-    BzR_DDs: []
-    BzR_DsPi: []
+    BpR_DDs: []
+    BpR_DsPi: []
     Z0: [] #{J: 0, Par: 1, float: mg, m0: 2.879, g0: 0.109, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
-    Z1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    Z1: {J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
     Z3: [] #{J: 3, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
-    BzR_DPi:
-        #- D0_2300m
+    BpR_DPi:
+        #- D0_2300o
         #- D0_2900
         - D2_2460
         - D1_2600
@@ -76,10 +76,10 @@ particle:
         #- D1_2760
         #- DJ_2640
         #- DJ_3000
-    D1_2010: {J: 1, Par: -1, m0: 2.01026, g0: 0.0000834}
+    D1_2007: {J: 1, Par: -1, m0: 2.00685, g0: 0.0001, model: BW2007}
 
-    NR_DPi0: [] #{display: "NR(0+)(D0pi-)", J: 0, P: 1, mass: 2.4, model: exp2}
-    NR_DPi1: [] #{display: "NR(1-)(D0pi-)", J: 1, P: -1, mass: 2.4, model: one}
+    NR_DPi0: [] #{display: "NR(0+)(D-pi+)", J: 0, P: 1, mass: 2.4, model: exp2}
+    NR_DPi1: [] #{display: "NR(1-)(D-pi+)", J: 1, P: -1, mass: 2.4, model: one}
     DPi_S: {J: 0, P: 1, mass: 2.65, fix_idx: 4, model: spline_c, points: [1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 3.0, 3.2, 3.4]}
         #model: interp_hist, points: [1.95, 2.0, 2.05, 2.1, 2.15, 2.2, 2.25, 2.3, 2.35, 2.4, 2.42, 2.44, 2.46, 2.48, 2.5, 2.55, 2.6, 2.65, 2.7, 2.75, 2.85, 2.95, 3.05, 3.15, 3.25, 3.35]} #max_m: 3.35, min_m: 1.95, interp_N: 29}
     DPi_P: [] #{J: 1, P: -1, mass: 2.65, #model: interp_hist, max_m: 3.4, min_m: 2.0, interp_N: 15}
@@ -99,40 +99,40 @@ plot:
         bins: 100
     # invariant mass
     mass:
-        BzR_DDs:
-            display: "$M_{\\bar D^0D_s^+}$"
+        BpR_DDs:
+            display: "$M_{D^-D_s^+}$"
             legend: True
             #trans: x*x
-        BzR_DPi:
-            display: "$M_{\\bar D^0\\pi^-}$"
+        BpR_DPi:
+            display: "$M_{D^-\\pi^+}$"
             legend: True
             #trans: x*x
-        BzR_DsPi:
-            display: "$M_{D_s^+\\pi^-}$"
+        BpR_DsPi:
+            display: "$M_{D_s^+\\pi^+}$"
             legend: True
             #trans: x*x
     angle:
-        BzR_DPi/D:
+        BpR_DPi/D:
             cos(beta):
-                display: "$\\cos(\\theta^{\\bar D^0\\pi^-}_{\\bar D^0})$"
+                display: "$\\cos(\\theta^{D^-\\pi^+}_{D^-})$"
                 range: [-1, 1]
-        BzR_DsPi/Ds:
+        BpR_DsPi/Ds:
             cos(beta):
-                display: "$\\cos(\\theta^{D_s^+\\pi^-}_{D_s^+})$"
+                display: "$\\cos(\\theta^{D_s^+\\pi^+}_{D_s^+})$"
                 range: [-1, 1]
-        BzR_DDs/D:
+        BpR_DDs/D:
             cos(beta):
-                display: "$\\cos(\\theta^{\\bar D^0D_s^+}_{\\bar D^0})$"
+                display: "$\\cos(\\theta^{D^-D_s^+}_{D^-})$"
                 range: [-1, 1]
     # 2D plot
     2Dplot:
-        m_BzR_DPi & m_BzR_DsPi:
-            display: "$M_{\\bar D^0\\pi^-}^2$ vs $M_{D_s^+\\pi^-}^2$"
+        m_BpR_DPi & m_BpR_DsPi:
+            display: "$M_{D^-\\pi^+}^2$ vs $M_{D_s^+\\pi^+}^2$"
             trans: x*x
             plot_figs: [""]
-    #    m_BzR_DsPi & m_BzR_DDs:
-    #        display: "$M_{D_s^+\\pi^-}^2$ vs $M_{\\bar D^0D_s^+}^2$"
+    #    m_BpR_DsPi & m_BpR_DDs:
+    #        display: "$M_{D_s^+\\pi^+}^2$ vs $M_{D^-D_s^+}^2$"
     #        plot_figs: ["data", "sideband"]
-    #    m_BzR_DDs & m_BzR_DPi:
-    #        display: "$M_{\\bar D^0D_s^+}^2$ vs $M_{\\bar D^0\\pi^-}^2$"
-    #        plot_figs: ["data", "sideband", "fitted"]
+    #    m_BpR_DDs & m_BpR_DPi:
+    #        display: "$M_{D^-D_s^+}^2$ vs $M_{D^-\\pi^+}^2$"
+    #        plot_figs: ["data", "sideband"]

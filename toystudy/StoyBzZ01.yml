@@ -1,13 +1,10 @@
 
 data:
-    model: cfit
     dat_order: [D, Ds, Pi]
-    bg_frac: [0.131039, 0.103967, 0.143792, 0.106173]
-    data_bg_value: ["toystudy/toy/BzData1_value.dat", "toystudy/toy/BzData2_value.dat", "toystudy/toy/BzData3_value.dat",  "toystudy/toy/BzData4_value.dat"]
-    phsp_bg_value: ["toystudy/toy/BzMC1_value.dat", "toystudy/toy/BzMC2_value.dat", "toystudy/toy/BzMC3_value.dat",  "toystudy/toy/BzMC4_value.dat"]
-    
     data: [["toystudy/toy/BzData1.dat"], ["toystudy/toy/BzData2.dat"],["toystudy/toy/BzData3.dat"], ["toystudy/toy/BzData4.dat"]]
     phsp: [["toystudy/toy/BzMC1.dat"], ["toystudy/toy/BzMC2.dat"],["toystudy/toy/BzMC3.dat"], ["toystudy/toy/BzMC4.dat"]]
+    bg: [["../dataDDspi/dat/B0toD0Dspi_BSB_Run1.dat"], ["../dataDDspi/dat/B0toD0Dspi_BSB_Run2.dat"],["../dataDDspi/dat/B0toD0_K3piDspi_BSB_Run1.dat"], ["../dataDDspi/dat/B0toD0_K3piDspi_BSB_Run2.dat"]]
+    bg_weight: [0.131039, 0.103967, 0.143792, 0.106173]
     cached_amp: True
 
 
@@ -47,8 +44,8 @@ decay:
 particle:
     $top:
         B: # Bz = 5.27963
-            J: 0
-            P: -1
+            J: 0  
+            P: -1  
     # final particles
     $finals:
         D: # Dz = 1.86483
@@ -63,8 +60,8 @@ particle:
     $include: Resonances.sample.yml
     BzR_DDs: []
     BzR_DsPi: []
-    Z0: [] #{J: 0, Par: 1, float: mg, m0: 2.879, g0: 0.109, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
-    Z1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    Z0: {J: 0, Par: 1, float: mg, m0: 2.879, g0: 0.109, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    Z1: {J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
     Z3: [] #{J: 3, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
     BzR_DPi:
@@ -95,7 +92,7 @@ constrains:
 
 plot:
     # plot configuration TODO
-    config:
+    config: 
         bins: 100
     # invariant mass
     mass:
