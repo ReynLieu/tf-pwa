@@ -79,7 +79,9 @@ class EffWeight:
                             n += 1
                 if n is 0:
                     print("$#@!!check", n_histo[idx], x_idx[idx], y_idx[idx])
-                new_vals[idx] = tmp/n
+                    new_vals[idx] = 0
+                else:
+                    new_vals[idx] = tmp/n
         return new_vals
 
 def _generate_mc_eff(num, eff_file):
@@ -167,7 +169,9 @@ def gen_toy(amp):
 
 fp = {}
 fe = {}
+fi = {'Ds2_2573p_mass': 2.5691, 'Ds2_2573p_width': 0.0169, 'Ds3_2860p_mass': 2.8605, 'Ds3_2860p_width': 0.053, 'Ds1_2700p_mass': 2.7083, 'Ds1_2700p_width': 0.12, 'Ds1_2860p_mass': 2.859, 'Ds1_2860p_width': 0.159, 'NR(DK)PS_a': -0.535567448777523, 'A->Ds2_2573p.BDs2_2573p->C.DB->E.F_total_0r': 1.0, 'A->Ds2_2573p.BDs2_2573p->C.DB->E.F_total_0i': 0.0, 'A->Ds2_2573p.B_g_ls_0r': 1.0, 'A->Ds2_2573p.B_g_ls_0i': 0.0, 'A->Ds2_2573p.B_g_ls_1r': 0.4291058731711176, 'A->Ds2_2573p.B_g_ls_1i': -0.24168507377186468, 'A->Ds2_2573p.B_g_ls_2r': 0.208784062722235, 'A->Ds2_2573p.B_g_ls_2i': 0.5106013264135965, 'Ds2_2573p->C.D_g_ls_0r': 1.0, 'Ds2_2573p->C.D_g_ls_0i': 0.0, 'B->E.F_g_ls_0r': 1.0, 'B->E.F_g_ls_0i': 0.0, 'A->Ds3_2860p.BDs3_2860p->C.DB->E.F_total_0r': 0.10965221622751667, 'A->Ds3_2860p.BDs3_2860p->C.DB->E.F_total_0i': 0.6984742184569209, 'A->Ds3_2860p.B_g_ls_0r': 1.0, 'A->Ds3_2860p.B_g_ls_0i': 0.0, 'A->Ds3_2860p.B_g_ls_1r': 1.3527116708826925, 'A->Ds3_2860p.B_g_ls_1i': 1.1206346233802222, 'A->Ds3_2860p.B_g_ls_2r': 0.21573794186987014, 'A->Ds3_2860p.B_g_ls_2i': -0.3750589270083364, 'Ds3_2860p->C.D_g_ls_0r': 1.0, 'Ds3_2860p->C.D_g_ls_0i': 0.0, 'A->Ds1_2700p.BDs1_2700p->C.DB->E.F_total_0r': -9.470553799417193, 'A->Ds1_2700p.BDs1_2700p->C.DB->E.F_total_0i': -0.9069078772379191, 'A->Ds1_2700p.B_g_ls_0r': 1.0, 'A->Ds1_2700p.B_g_ls_0i': 0.0, 'A->Ds1_2700p.B_g_ls_1r': -0.3899977991126207, 'A->Ds1_2700p.B_g_ls_1i': 0.021096654366939294, 'A->Ds1_2700p.B_g_ls_2r': -0.2177468119960149, 'A->Ds1_2700p.B_g_ls_2i': 0.116700512588848, 'Ds1_2700p->C.D_g_ls_0r': 1.0, 'Ds1_2700p->C.D_g_ls_0i': 0.0, 'A->Ds1_2860p.BDs1_2860p->C.DB->E.F_total_0r': 2.4361554698302026, 'A->Ds1_2860p.BDs1_2860p->C.DB->E.F_total_0i': -2.4168496731125177, 'A->Ds1_2860p.B_g_ls_0r': 1.0, 'A->Ds1_2860p.B_g_ls_0i': 0.0, 'A->Ds1_2860p.B_g_ls_1r': 0.07830775405269035, 'A->Ds1_2860p.B_g_ls_1i': 0.4434625255708179, 'A->Ds1_2860p.B_g_ls_2r': -0.43270840520982723, 'A->Ds1_2860p.B_g_ls_2i': -0.3001433811439401, 'Ds1_2860p->C.D_g_ls_0r': 1.0, 'Ds1_2860p->C.D_g_ls_0i': 0.0, 'A->NR(DK)PS.BNR(DK)PS->C.DB->E.F_total_0r': -13.448490128757102, 'A->NR(DK)PS.BNR(DK)PS->C.DB->E.F_total_0i': 12.209728910426074, 'A->NR(DK)PS.B_g_ls_0r': 1.0, 'A->NR(DK)PS.B_g_ls_0i': 0.0, 'NR(DK)PS->C.D_g_ls_0r': 1.0, 'NR(DK)PS->C.D_g_ls_0i': 0.0, 'A->NR(DK)SP.BNR(DK)SP->C.DB->E.F_total_0r': -10.13942697422275, 'A->NR(DK)SP.BNR(DK)SP->C.DB->E.F_total_0i': -7.579433191699624, 'A->NR(DK)SP.B_g_ls_0r': 1.0, 'A->NR(DK)SP.B_g_ls_0i': 0.0, 'NR(DK)SP->C.D_g_ls_0r': 1.0, 'NR(DK)SP->C.D_g_ls_0i': 0.0, 'weight_injectMC': 0.001, 'weight_injectMC_1': 0.001, 'weight_injectMC_2': 0.001, 'weight_injectMC_3': 0.001, 'weight_injectMC_4': 0.001, 'weight_injectMC_5': 0.001}
 def fit(i, n):
+    bad_toy = False
     vm = VarsManager()
     config = ConfigLoader("toy/config_toy.yml", vm=vm)
     #config0 = ConfigLoader("toy/config_toy0.yml", vm=vm)
@@ -191,8 +195,9 @@ def fit(i, n):
         config.reinit_params()
         fit_res = config.fit(batch=150000, method="BFGS")
         if fit_res.success and (fit_res.min_nll < fit_result.min_nll):
-            print("$$$ New Min Found")
             fit_result = fit_res
+            if fit_result.min_nll - fit_res.min_nll > 1e-6:
+                print("$$$ New Min Found")
     config.set_params(fit_result.params)
 
     amp.cached_fun = amp.decay_group.sum_amp # turn off use_tf_function
@@ -206,10 +211,13 @@ def fit(i, n):
     for v in amp.vm.trainable_vars:
         fp[v].append(fit_result.params[v])
         fe[v].append(fit_result.error[v])
+        if v!='NR(DK)PS_a' and abs(fit_result.params[v] - fi[v])/fit_result.error[v] > 5:
+            bad_toy = True
+            print("!!!BAD_TOY", v)
         #print(v, fp[v], fe[v])
     print(f"@@@@@values\n{fp}")
     print(f"@@@@@errors\n{fe}")
-
+    return bad_toy
 
 
 
@@ -220,7 +228,9 @@ def main(Ntoy):
         os.mkdir("toy/toydat")
     print("$$$$$Start fit100toys")
     for i in range(Ntoy):
-        fit(i, n=10)
+        bad_toy = fit(i, n=10)
+        if bad_toy:
+            break
 
 if __name__ == "__main__":
     main(40)
