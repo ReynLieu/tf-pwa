@@ -367,7 +367,7 @@ class VarsManager(object):
                             val = tf.random.normal(
                                 shape=[], mean=mu, stddev=sigma, dtype=self.dtype
                             )
-                            if val < range_[1] and val > range_[0]:
+                            if val < range_.upper and val > range_.lower:
                                 break
                     self.variables[name].assign(val)
                 else:
