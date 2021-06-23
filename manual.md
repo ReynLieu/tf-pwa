@@ -15,9 +15,8 @@ git checkout DDspi
 ### To get the data files 
 ```
 mkdir ../dataDDspi
-scp -r liuyr@login.lzuhep.lzu.edu.cn:/data2/liuyr/workspace/dataDDspi/dat* ../dataDDspi/ 
+scp -r [user_name]@lxplus.cern.ch:/eos/lhcb/wg/b2oc/B2DDspi_dal/dataDDspi/dat* ../dataDDspi/ 
 ```
-(Ask me for password)
 
 ### Then you need the configuration files
 For sfit, `touch config.yml config_Bp.yml`.
