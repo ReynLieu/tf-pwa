@@ -32,6 +32,7 @@ def fit_toy(config, i, param_file, amps, vm, sc="sfit", fitloop=1):
     print(f"### Start {sc} toy {i}")
     set_same_D1(config)
     config.set_params(param_file)
+    initNLL = config.get_fcn({})
     fit_result = config.fit(batch=150000, method="BFGS")
     if not fit_result.success:
         print(f"$$$$$ {sc} failed")
@@ -45,7 +46,7 @@ def fit_toy(config, i, param_file, amps, vm, sc="sfit", fitloop=1):
             if fit_result.min_nll - fit_res.min_nll > 1e-6:
                 print("$$$ New Min Found")
     config.set_params(fit_result.params)
-
+    improveNLL = initNLL - fit_result.min_nll
     '''for amp in amps:
         amp.cached_fun = amp.decay_group.sum_amp # turn off use_tf_function
     vm.rp2xy_all()
@@ -60,22 +61,28 @@ def fit_toy(config, i, param_file, amps, vm, sc="sfit", fitloop=1):
         for v in vm.trainable_vars:
             fp_s[v].append(fit_result.params[v])
             fe_s[v].append(fit_result.error[v])
+        impNLL_s.append(improveNLL)
         print(f"@@@@@{sc} values{i}\n{fp_s}")
         print(f"@@@@@{sc} errors{i}\n{fe_s}")
+        print(f"@@@@@{sc} change in NLL{i}\n{impNLL_s}")
     elif sc == "cfit":
         for v in vm.trainable_vars:
             fp_c[v].append(fit_result.params[v])
             fe_c[v].append(fit_result.error[v])
+        impNLL_c.append(improveNLL)
         print(f"@@@@@{sc} values{i}\n{fp_c}")
         print(f"@@@@@{sc} errors{i}\n{fe_c}")
+        print(f"@@@@@{sc} change in NLL{i}\n{impNLL_c}")
 
 
 if __name__ == "__main__":
     Ntoy = 200 # edit
     fp_s = {}
     fe_s = {}
+    impNLL_s = []
     fp_c = {}
     fe_c = {}
+    impNLL_c = []
     print(f"$$$$$ Start fit {Ntoy} toys")
     for i in range(Ntoy):
         # edit below
