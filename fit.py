@@ -263,10 +263,7 @@ def main():
         except:
             vm = config.get_amplitude().vm
         #vm.rp2xy_all()
-        try:
-            vm.set_same(["B->D0_2400m.DsD0_2400m->D.Pi_total_0", "B->D0_2400o.DsD0_2400o->D.Pi_total_0"], cplx=True)
-        except:
-            pass
+
         fit_result = fit(
             config, vm, results.init, results.method, results.loop, results.maxiter
         )

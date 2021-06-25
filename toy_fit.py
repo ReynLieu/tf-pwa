@@ -161,13 +161,21 @@ def gen_weigths_for_cfit(mode, config):
         weff = eff.weight(*Dvars, eff_0_correct=True)
         np.savetxt(save_file, wbkg/weff)
 
+def set_same_D1(config): # set the total parameter of D1_2010 and D1_2007 to be the same in fitting
+    try:
+        vm = config.get_amplitudes()[0].vm
+        vm.set_same(["B->D1_2010.DsD1_2010->D.Pi_total_0", "B->D1_2007.DsD1_2007->D.Pi_total_0"], cplx=True)
+    except:
+        vm = config.get_amplitude().vm
 
 def fit_null(config):
+    set_same_D1(config)
     #config.get_amplitudes()[0].vm.rp2xy_all()
     fit_result = config.fit(batch=150000, method="BFGS")
     return fit_result
 
 def fit_Z(config, params, ZJ=0, loop=1):
+    set_same_D1(config)
     config.set_params(params)
     config.set_params({f"B->Z{ZJ}.DZ{ZJ}->Ds.Pi_total_0r": 0})
     frt = config.fit(batch=150000, method="BFGS")

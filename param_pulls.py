@@ -30,6 +30,7 @@ def param_pulls(i, base="", param_file=None, sfit=True, cfit=True, **kwargs):
 
 def fit_toy(config, i, param_file, amps, vm, sc="sfit", fitloop=1):
     print(f"### Start {sc} toy {i}")
+    set_same_D1(config)
     config.set_params(param_file)
     fit_result = config.fit(batch=150000, method="BFGS")
     if not fit_result.success:
