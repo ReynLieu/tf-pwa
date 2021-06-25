@@ -32,7 +32,7 @@ def fit_toy(config, i, param_file, amps, vm, sc="sfit", fitloop=1):
     print(f"### Start {sc} toy {i}")
     set_same_D1(config)
     config.set_params(param_file)
-    initNLL = config.get_fcn({})
+    initNLL = config.get_fcn()({})
     fit_result = config.fit(batch=150000, method="BFGS")
     if not fit_result.success:
         print(f"$$$$$ {sc} failed")
@@ -46,7 +46,7 @@ def fit_toy(config, i, param_file, amps, vm, sc="sfit", fitloop=1):
             if fit_result.min_nll - fit_res.min_nll > 1e-6:
                 print("$$$ New Min Found")
     config.set_params(fit_result.params)
-    improveNLL = initNLL - fit_result.min_nll
+    improveNLL = (initNLL - fit_result.min_nll).numpy()
     '''for amp in amps:
         amp.cached_fun = amp.decay_group.sum_amp # turn off use_tf_function
     vm.rp2xy_all()
@@ -86,5 +86,5 @@ if __name__ == "__main__":
     print(f"$$$$$ Start fit {Ntoy} toys")
     for i in range(Ntoy):
         # edit below
-        param_pulls(i, base="MD", param_file="save/MD_s/final_params_xy.json", sfit=True, cfit=False, fitloop=1)
+        param_pulls(i, base="MD", param_file="../DDspi/save/MD_s/final_params_xy.json", sfit=True, cfit=False, fitloop=1)
 
