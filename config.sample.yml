@@ -106,15 +106,18 @@ plot:
     mass:
         BzR_DDs:
             display: "$M_{\\bar D^0D_s^+}$"
-            legend: True
+            #legend: False
+            #yscale: log
             #trans: x*x
         BzR_DPi:
             display: "$M_{\\bar D^0\\pi^-}$"
-            legend: True
+            #legend: False
+            #yscale: log
             #trans: x*x
         BzR_DsPi:
             display: "$M_{D_s^+\\pi^-}$"
-            legend: True
+            #legend: False
+            #yscale: log
             #trans: x*x
     angle:
         BzR_DPi/D:
@@ -280,15 +283,18 @@ plot:
     mass:
         BpR_DDs:
             display: "$M_{D^-D_s^+}$"
-            legend: True
+            #legend: False
+            #yscale: log
             #trans: x*x
         BpR_DPi:
             display: "$M_{D^-\\pi^+}$"
-            legend: True
+            #legend: False
+            #yscale: log
             #trans: x*x
         BpR_DsPi:
             display: "$M_{D_s^+\\pi^+}$"
-            legend: True
+            #legend: False
+            #yscale: log
             #trans: x*x
     angle:
         BpR_DPi/D:

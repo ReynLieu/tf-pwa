@@ -500,14 +500,17 @@ def _plot_partial_wave(
                         )
             legends.append(le3[0])
             legends_label.append(label)
+        ax.minorticks_on()
         if yscale == "log":
-            ax.set_ylim((0.1, upper_ylim))
+            if upper_ylim is None:
+                ax.set_ylim((0.1, 1.5*max(data_hist.count)))
+            else:
+                ax.set_ylim((0.1, upper_ylim))
         else:
             ax.set_ylim((0, upper_ylim))
+            ax.tick_params(axis='y', which='minor', left=False)
         ax.set_xlim(xrange)
         ax.set_yscale(yscale)
-        ax.minorticks_on()
-        ax.tick_params(axis='y', which='minor', left=False)
         if has_legend:
             leg = ax.legend(
                 legends,
