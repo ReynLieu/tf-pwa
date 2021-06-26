@@ -254,7 +254,7 @@ def main():
         "--total-same", action="store_true", default=True, dest="total_same"
     )
     parser.add_argument(
-        "-y", "--xycoord", type=int, default=0, dest="use xy coord"
+        "-y", "--xycoord", type=int, default=0, dest="xycoord"
     )
     results = parser.parse_args()
     if results.has_gpu:
