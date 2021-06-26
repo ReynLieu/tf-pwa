@@ -57,7 +57,7 @@ def load_config(config_file="config.yml", total_same=False):
     return MultiConfig(config_files, total_same=total_same)
 
 
-def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500):
+def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500, xycoord=0):
     """
     simple fit script
     """
@@ -66,6 +66,8 @@ def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500):
 
     # load data
     all_data = config.get_all_data()
+    if xycoord == 1: # use xy init_params and fit in xy
+        vm.rp2xy_all()
     fit_results = []
     '''if maxiter is 0:
         try:
@@ -83,7 +85,8 @@ def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500):
             print("\nusing RANDOM parameters", flush=True)
         # try to fit
         try:
-            #vm.rp2xy_all()
+            if xycoord == 2: # fit in xy
+                vm.rp2xy_all()
             vm.std_polar_all()
             fit_result = config.fit(
                 batch=65000, method=method, maxiter=maxiter
@@ -250,6 +253,9 @@ def main():
     parser.add_argument(
         "--total-same", action="store_true", default=True, dest="total_same"
     )
+    parser.add_argument(
+        "-y", "--xycoord", type=int, default=0, dest="use xy coord"
+    )
     results = parser.parse_args()
     if results.has_gpu:
         devices = "/device:GPU:0"
@@ -265,7 +271,7 @@ def main():
         #vm.rp2xy_all()
 
         fit_result = fit(
-            config, vm, results.init, results.method, results.loop, results.maxiter
+            config, vm, results.init, results.method, results.loop, results.maxiter, results.xycoord
         )
         if isinstance(config, ConfigLoader):
             write_some_results(
