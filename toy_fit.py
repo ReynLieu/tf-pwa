@@ -196,15 +196,19 @@ def fit_Z(config, params, ZJ=0, loop=1):
 def sig_test(sfit=True, cfit=True, null="", alternative="Z0", param_file=None, fitloop=1):
     if param_file is None:
         param_file = f"toystudy/params/base{null}_s.json"
-    Sconfig = MultiConfig([f"toystudy/StoyBz{null}.yml", f"toystudy/StoyBp{null}.yml"], total_same=True)
-    Sconfig.set_params(param_file)
-    ampBz, ampBp = Sconfig.get_amplitudes()
+    if sfit:
+        config = MultiConfig([f"toystudy/StoyBz{null}.yml", f"toystudy/StoyBp{null}.yml"], total_same=True)
+    else:
+        config = MultiConfig([f"toystudy/CtoyBz{null}.yml", f"toystudy/CtoyBp{null}.yml"], total_same=True)
+    config.set_params(param_file)
+    ampBz, ampBp = config.get_amplitudes()
     gen_toyBz(ampBz)
     gen_toyBp(ampBp)
     Sdnll = 0
     Cdnll = 0
     if sfit:
         print("### Null Sfit")
+        Sconfig = config
         Sfr0 = fit_null(Sconfig)
         print("### Alternative Sfit")
         SconfigZ = MultiConfig([f"toystudy/StoyBz{alternative}.yml", f"toystudy/StoyBp{alternative}.yml"], total_same=True)
@@ -216,9 +220,12 @@ def sig_test(sfit=True, cfit=True, null="", alternative="Z0", param_file=None, f
 
     if cfit:
         print("### Null Cfit")
-        Cconfig = MultiConfig([f"toystudy/CtoyBz{null}.yml", f"toystudy/CtoyBp{null}.yml"], total_same=True)
-        gen_weigths_for_cfit("Bz", Sconfig.configs[0]) # only for access to data and phsp
-        gen_weigths_for_cfit("Bp", Sconfig.configs[1])
+        if sfit:
+            Cconfig = MultiConfig([f"toystudy/CtoyBz{null}.yml", f"toystudy/CtoyBp{null}.yml"], total_same=True)
+        else:
+            Cconfig = config
+        gen_weigths_for_cfit("Bz", Cconfig.configs[0]) # only for access to data and phsp
+        gen_weigths_for_cfit("Bp", Cconfig.configs[1])
         Cconfig.set_params(param_file)
         Cfr0 = fit_null(Cconfig)
         print("### Alternative Cfit")
@@ -237,7 +244,7 @@ def main(Ntoy):
     CdNLL = []
     for i in range(Ntoy):
         print("##### Start toy {}".format(i))
-        Sdnll, Cdnll = sig_test(sfit=True, cfit=True, null="Z0", alternative="Z01", param_file="toystudy/params/baseZ0_c.json") # edit
+        Sdnll, Cdnll = sig_test(sfit=False, cfit=True, null="", alternative="Z0", param_file="toystudy/params/base_c.json") # edit
         print("$$$$$dnll:", Sdnll, Cdnll)
         SdNLL.append(Sdnll)
         CdNLL.append(Cdnll)
