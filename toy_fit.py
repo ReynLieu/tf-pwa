@@ -220,12 +220,12 @@ def sig_test(sfit=True, cfit=True, null="", alternative="Z0", param_file=None, f
 
     if cfit:
         print("### Null Cfit")
+        gen_weigths_for_cfit("Bz", config.configs[0]) # only for access to data and phsp
+        gen_weigths_for_cfit("Bp", config.configs[1])
         if sfit:
             Cconfig = MultiConfig([f"toystudy/CtoyBz{null}.yml", f"toystudy/CtoyBp{null}.yml"], total_same=True)
-        else:
-            Cconfig = config
-        gen_weigths_for_cfit("Bz", Cconfig.configs[0]) # only for access to data and phsp
-        gen_weigths_for_cfit("Bp", Cconfig.configs[1])
+        else: # unsolved problem here: cannot use config directly, need to load data again
+            Cconfig = MultiConfig([f"toystudy/CtoyBz{null}.yml", f"toystudy/CtoyBp{null}.yml"], total_same=True) #config
         Cconfig.set_params(param_file)
         Cfr0 = fit_null(Cconfig)
         print("### Alternative Cfit")
