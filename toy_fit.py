@@ -77,6 +77,7 @@ def gen_mc_from_eff_map(mcfile, Nmc, eff_file):
     pf = pf.reshape(-1, 3, 4)
     mc_four_momentum = pf[weff>uni_rdm]
     Nmcsample = len(mc_four_momentum)
+    print(f"### Generate {Nmcsample} MC")
     mc_four_momentum = mc_four_momentum.reshape(-1, 4)
     np.savetxt(mcfile, mc_four_momentum)
 
@@ -86,7 +87,7 @@ def gen_toyBz(amp):
     genfile = "toystudy/toy/BzData1.dat"
     bgfile = "../dataDDspi/dat/B0toD0Dspi_BSB_Run1.dat"
     efffile = "../dataDDspi/B0toD0Dspi/EffMapCorr/EffMap_B0toD0Dspi_Run1.root"
-    gen_mc_from_eff_map(mcfile, ndata*10, efffile)
+    gen_mc_from_eff_map(mcfile, ndata*100, efffile)
     gen_data(amp, ndata, mcfile=mcfile, genfile=genfile, Poisson_fluc=True, Nbg=nbg, wbg=wbg, bgfile=bgfile)
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
 
@@ -95,7 +96,7 @@ def gen_toyBz(amp):
     genfile = "toystudy/toy/BzData2.dat"
     bgfile = "../dataDDspi/dat/B0toD0Dspi_BSB_Run2.dat"
     efffile = "../dataDDspi/B0toD0Dspi/EffMapCorr/EffMap_B0toD0Dspi_Run2.root"
-    gen_mc_from_eff_map(mcfile, ndata*10, efffile)
+    gen_mc_from_eff_map(mcfile, ndata*100, efffile)
     gen_data(amp, ndata, mcfile=mcfile, genfile=genfile, Poisson_fluc=True, Nbg=nbg, wbg=wbg, bgfile=bgfile)
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
 
@@ -104,7 +105,7 @@ def gen_toyBz(amp):
     genfile = "toystudy/toy/BzData3.dat"
     bgfile = "../dataDDspi/dat/B0toD0_K3piDspi_BSB_Run1.dat"
     efffile = "../dataDDspi/B0toD0_K3piDspi/EffMapCorr/EffMap_B0toD0_K3piDspi_Run1.root"
-    gen_mc_from_eff_map(mcfile, ndata*10, efffile)
+    gen_mc_from_eff_map(mcfile, ndata*100, efffile)
     gen_data(amp, ndata, mcfile=mcfile, genfile=genfile, Poisson_fluc=True, Nbg=nbg, wbg=wbg, bgfile=bgfile)
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
 
@@ -113,7 +114,7 @@ def gen_toyBz(amp):
     genfile = "toystudy/toy/BzData4.dat"
     bgfile = "../dataDDspi/dat/B0toD0_K3piDspi_BSB_Run2.dat"
     efffile = "../dataDDspi/B0toD0_K3piDspi/EffMapCorr/EffMap_B0toD0_K3piDspi_Run2.root"
-    gen_mc_from_eff_map(mcfile, ndata*10, efffile)
+    gen_mc_from_eff_map(mcfile, ndata*100, efffile)
     gen_data(amp, ndata, mcfile=mcfile, genfile=genfile, Poisson_fluc=True, Nbg=nbg, wbg=wbg, bgfile=bgfile)
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
 
@@ -123,7 +124,7 @@ def gen_toyBp(amp):
     genfile = "toystudy/toy/BpData1.dat"
     bgfile = "../dataDDspi/dat/BptoDmDspi_BSB_Run1.dat"
     efffile = "../dataDDspi/BptoDmDspi/EffMapCorr/EffMap_BptoDmDspi_Run1.root"
-    gen_mc_from_eff_map(mcfile, ndata*10, efffile)
+    gen_mc_from_eff_map(mcfile, ndata*100, efffile)
     gen_data(amp, ndata, mcfile=mcfile, genfile=genfile, Poisson_fluc=True, Nbg=nbg, wbg=wbg, bgfile=bgfile)
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
 
@@ -132,7 +133,7 @@ def gen_toyBp(amp):
     genfile = "toystudy/toy/BpData2.dat"
     bgfile = "../dataDDspi/dat/BptoDmDspi_BSB_Run2.dat"
     efffile = "../dataDDspi/BptoDmDspi/EffMapCorr/EffMap_BptoDmDspi_Run2.root"
-    gen_mc_from_eff_map(mcfile, ndata*10, efffile)
+    gen_mc_from_eff_map(mcfile, ndata*100, efffile)
     gen_data(amp, ndata, mcfile=mcfile, genfile=genfile, Poisson_fluc=True, Nbg=nbg, wbg=wbg, bgfile=bgfile)
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
 
@@ -244,7 +245,7 @@ def main(Ntoy):
     CdNLL = []
     for i in range(Ntoy):
         print("##### Start toy {}".format(i))
-        Sdnll, Cdnll = sig_test(sfit=False, cfit=True, null="", alternative="Z0", param_file="toystudy/params/base_c.json") # edit
+        Sdnll, Cdnll = sig_test(sfit=True, cfit=False, null="", alternative="Z0", param_file="toystudy/params/base_s.json") # edit
         print("$$$$$dnll:", Sdnll, Cdnll)
         SdNLL.append(Sdnll)
         CdNLL.append(Cdnll)

@@ -22,9 +22,9 @@ def param_pulls(i, base="", param_file=None, sfit=True, cfit=True, **kwargs):
     if sfit:
         fit_toy(Sconfig, i, param_file, [ampBz,ampBp], vm, sc="sfit", **kwargs)
     if cfit:
-        Cconfig = MultiConfig([f"toystudy/CtoyBz{base}.yml", f"toystudy/CtoyBp{base}.yml"], total_same=True, vm=vm)
         gen_weigths_for_cfit("Bz", Sconfig.configs[0]) # use Sconfig only for access to data and phsp
         gen_weigths_for_cfit("Bp", Sconfig.configs[1])
+        Cconfig = MultiConfig([f"toystudy/CtoyBz{base}.yml", f"toystudy/CtoyBp{base}.yml"], total_same=True, vm=vm)
         fit_toy(Cconfig, i, param_file, [ampBz,ampBp], vm, sc="cfit", **kwargs)
         
 
@@ -76,7 +76,7 @@ def fit_toy(config, i, param_file, amps, vm, sc="sfit", fitloop=1):
 
 
 if __name__ == "__main__":
-    Ntoy = 200 # edit
+    Ntoy = 100 # edit
     fp_s = {}
     fe_s = {}
     impNLL_s = []
@@ -86,5 +86,5 @@ if __name__ == "__main__":
     print(f"$$$$$ Start fit {Ntoy} toys")
     for i in range(Ntoy):
         # edit below
-        param_pulls(i, base="MD", param_file="../DDspi/save/MD_s/final_params_xy.json", sfit=True, cfit=False, fitloop=1)
+        param_pulls(i, base="Z0", param_file="../DDspi/save/baseZ0_c/final_params_xy.json", sfit=True, cfit=True, fitloop=1)
 

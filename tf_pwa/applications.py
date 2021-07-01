@@ -258,15 +258,19 @@ def gen_data(
     n = 0
     idx_list = []
 
+    j = 0
     while n < Nmc:
         uni_rdm = tf.random.uniform(
             [Nsample], minval=0, maxval=ampsq_max, dtype=dtype
         )
         list_rdm = tf.random.uniform([Nsample], dtype=tf.int64, maxval=Nsample)
-        j = 0
+        #list_rdm = tf.range(Nsample)
         mask = tf.boolean_mask(list_rdm, tf.gather(ampsq, list_rdm) > uni_rdm)
         idx_list.append(mask)
         n += mask.shape[0]
+        if j > 0:
+            print(f"$$$ Maybe not enough MC (iter {j})")
+        j += 1
         # print(mask)
         # for i in list_rdm:
         # if ampsq[i] > uni_rdm[j]:
