@@ -44,7 +44,11 @@ class DatWeight:
                         if tmp_val > 0:
                             tmp += tmp_val
                             n += 1
-                new_vals[idx] = tmp/n
+                if n == 0:
+                    #print("$#@ check new_vals[idx] = 0 in dat_cfit.py")
+                    new_vals[idx] = 0
+                else:
+                    new_vals[idx] = tmp/n
         return new_vals
 
 Bz = 5.27963
@@ -67,6 +71,23 @@ def get_var_from_data_dic(data_dic, mode):
     mDPi_ = np.arccos(2*(mDPi-mmin)/dm - 1) / np.pi
     thetaDPi_ = 1 - data_index(data_dic, ["decay", "[B->(D, Pi)+Ds, (D, Pi)->D+Pi]", "(D, Pi)->D+Pi", "D", "ang", "beta"])/np.pi
     return [mDPi*mDPi, mDsPi*mDsPi], [mDPi_, thetaDPi_]
+
+def gen_bkg_sample(bkg_file, Nsample, config, bkg_pdf, mode, md): # generate bkg sample (for cfit plot)
+    if mode == "Bz":
+        pf = gen_mc(Bz, [Dz, Dsp, pim], Nsample, bkg_file)
+    elif mode == "Bp":
+        pf = gen_mc(Bp, [Dm, Dsp, pip], Nsample, bkg_file)
+    bkg_sample = prepare_data_from_decay(bkg_file, config.decay_struct)
+    Dvars, SqDvars = get_var_from_data_dic(bkg_sample, md)
+    maxbkgval = np.max(bkg_pdf.values)
+    uni_rdm = np.random.uniform(0, maxbkgval, Nsample)
+    wbkg = bkg_pdf.weight(*SqDvars)
+    pf = pf.reshape(-1, 3, 4)
+    bkg_four_momentum = pf[wbkg>uni_rdm]
+    Nbgsample = len(bkg_four_momentum)
+    bkg_four_momentum = bkg_four_momentum.reshape(-1, 4)
+    np.savetxt(bkg_file, bkg_four_momentum)
+    return bkg_four_momentum
 
 def main(mode):
     if mode == "Bz":
@@ -103,27 +124,14 @@ def main(mode):
         np.savetxt(save_file, wbkg/weff)
         print("Done saving "+save_file)
 
-        # generate bkg sample (for cfit plot)
-        '''Nsample = 10000
-        bkg_sample_file = f"../dataDDspi/dat_cfit/{md}{rn}_BKGsample.dat"
-        if mode == "Bz":
-            pf = gen_mc(Bz, [Dz, Dsp, pim], Nsample, bkg_sample_file)
-        elif mode == "Bp":
-            pf = gen_mc(Bp, [Dm, Dsp, pip], Nsample, bkg_sample_file)
-        bkg_sample = prepare_data_from_decay(bkg_sample_file, config.decay_struct)
-        Dvars, SqDvars = get_var_from_data_dic(bkg_sample, md)
-        maxbkgval = np.max(bkg.values)
-        uni_rdm = np.random.uniform(0, maxbkgval, Nsample)
-        wbkg = bkg.weight(*SqDvars)
-        pf = pf.reshape(-1, 3, 4)
-        bkg_four_momentum = pf[wbkg>uni_rdm]
-        Nbgsample = len(bkg_four_momentum)
-        bkg_four_momentum = bkg_four_momentum.reshape(-1, 4)'''
-        #np.savetxt(bkg_sample_file, bkg_four_momentum)
-        #print(f"Done saving {bkg_sample_file} with {Nbgsample} events, the weight should be {bg_num[i]/Nbgsample}")
-
+        bkg_file = f"../dataDDspi/dat_cfit/{md}{rn}_BKGsample.dat"
+        fourmom = gen_bkg_sample(
+            bkg_file=bkg_file, Nsample=int(100*bg_num[i]), config=config, bkg_pdf=bkg, mode=mode, md=md
+            )
+        Nbgsample = len(fourmom)//3 # one event has three lines
+        print(f"Done saving {bkg_file} with {Nbgsample} events, the weight should be {bg_num[i]/Nbgsample}")
 
 
 if __name__ == "__main__":
-    mode = "Bz" # edit
-    main(mode)
+    main("Bz") # edit
+    main("Bp") # edit

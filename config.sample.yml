@@ -67,7 +67,7 @@ particle:
         #- DDs
     BzR_DsPi: []
         #- DsPi
-    Z0: [] #{J: 0, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    Z0: {J: 0, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.001, g_max: 0.5,}
     Z3: [] #{J: 3, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.001, g_max: 0.5,}
@@ -124,14 +124,17 @@ plot:
             cos(beta):
                 display: "$\\cos(\\theta^{\\bar D^0\\pi^-}_{\\bar D^0})$"
                 range: [-1, 1]
+                yscale: log
         BzR_DsPi/Ds:
             cos(beta):
                 display: "$\\cos(\\theta^{D_s^+\\pi^-}_{D_s^+})$"
                 range: [-1, 1]
+                yscale: log
         BzR_DDs/D:
             cos(beta):
                 display: "$\\cos(\\theta^{\\bar D^0D_s^+}_{\\bar D^0})$"
                 range: [-1, 1]
+                yscale: log
     # 2D plot
     2Dplot:
         m_BzR_DPi & m_BzR_DsPi:
@@ -164,7 +167,7 @@ data:
     phsp_noeff: ["../dataDDspi/dat/B0toD0Dspi_MC_Noeff.dat"]
     cached_amp: True
     bg: [["../dataDDspi/dat_cfit/B0toD0Dspi_Run1_BKGsample.dat"], ["../dataDDspi/dat_cfit/B0toD0Dspi_Run2_BKGsample.dat"],["../dataDDspi/dat_cfit/B0toD0_K3piDspi_Run1_BKGsample.dat"], ["../dataDDspi/dat_cfit/B0toD0_K3piDspi_Run2_BKGsample.dat"]]
-    bg_weight: [0.0211211282740094, 0.07970803333333333, 0.005437684390105203, 0.031138509987893463]
+    bg_weight: [0.03433336244541484, 0.037363140625, 0.029742357698289267, 0.030020903705865187] # note the sample data has changed. need to scp from lxplus.cern.ch
 
 
 
@@ -244,7 +247,7 @@ particle:
         #- DDs
     BpR_DsPi: []
         #- DsPi
-    Z0: [] #{J: 0, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    Z0: {J: 0, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.001, g_max: 0.5,}
     Z3: [] #{J: 3, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.001, g_max: 0.5,}
@@ -301,14 +304,17 @@ plot:
             cos(beta):
                 display: "$\\cos(\\theta^{D^-\\pi^+}_{D^-})$"
                 range: [-1, 1]
+                yscale: log
         BpR_DsPi/Ds:
             cos(beta):
                 display: "$\\cos(\\theta^{D_s^+\\pi^+}_{D_s^+})$"
                 range: [-1, 1]
+                yscale: log
         BpR_DDs/D:
             cos(beta):
                 display: "$\\cos(\\theta^{D^-D_s^+}_{D^-})$"
                 range: [-1, 1]
+                yscale: log
     # 2D plot
     2Dplot:
         m_BpR_DPi & m_BpR_DsPi:
@@ -341,4 +347,4 @@ data:
     phsp_noeff: ["../dataDDspi/dat/BptoDmDspi_MC_Noeff.dat"]
     cached_amp: True
     bg: [["../dataDDspi/dat_cfit/BptoDmDspi_Run1_BKGsample.dat"], ["../dataDDspi/dat_cfit/BptoDmDspi_Run2_BKGsample.dat"]]
-    bg_weight: [0.010895180049720324, 0.05000909288840262]
+    bg_weight: [0.030461068114682886, 0.037890282591876205] # note the sample data has changed. need to scp from lxplus.cern.ch
