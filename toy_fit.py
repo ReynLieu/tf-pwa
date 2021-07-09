@@ -3,51 +3,9 @@ import numpy as np
 import uproot
 from tf_pwa.applications import gen_data, gen_mc
 from tf_pwa.angle import LorentzVector as lv
-from dat_cfit import get_var_from_data_dic
+from tf_pwa.cal_angle import prepare_data_from_decay
+from dat_cfit import DatWeight, get_var_from_data_dic, gen_bkg_sample
 from fit import *
-
-
-class DatWeight:
-    def __init__(self, file_name, branch):
-        with uproot.open(file_name) as f:
-            self.eff_bin = f.get(branch)
-        self.x_bins, self.y_bins = self.eff_bin.bins
-        self.values = self.eff_bin.values
-
-    def index_bin(self, x, xi):
-        xi1 = np.expand_dims(xi, axis=-1)
-        mask = (x[:, 0] < xi1) & (x[:, 1] > xi1)
-        idx1, idx2 = np.nonzero(mask)
-        idx = np.zeros_like(xi, dtype="int64")
-        idx[idx1] = idx2
-        return idx
-
-    def weight(self, m2_13, m2_23, eff_0_correct=False):
-        x_idx = self.index_bin(self.x_bins, m2_13)
-        y_idx = self.index_bin(self.y_bins, m2_23)
-        values = self.values[x_idx, y_idx]
-        if eff_0_correct:
-            values = self._where_eff_0_(values, x_idx, y_idx)
-        return values
-
-    def _where_eff_0_(self, values, x_idx, y_idx):
-        new_vals = values.copy()
-        for tr_fl, idx in zip(values > 0, range(len(values))):
-            if not tr_fl:        
-                tmp = 0
-                n = 0
-                tmp_val = 0
-                for i in range(-1,2):
-                    for j in range(-1,2):
-                        tmp_val = self.values[x_idx[idx]+i, y_idx[idx]+j]
-                        if tmp_val > 0:
-                            tmp += tmp_val
-                            n += 1
-                if n == 0:
-                    new_vals[idx] = 0
-                else:
-                    new_vals[idx] = tmp/n
-        return new_vals
 
 Bz = 5.27963
 Dz = 1.86483
@@ -58,9 +16,9 @@ Dm = 1.86965
 pip = pim
 
 def gen_mc_from_eff_map(mcfile, Nmc, eff_file):
-    if mcfile[-9:-7] == "Bz":
+    if mcfile.split('/')[-1][:2] == "Bz":
         pf = gen_mc(Bz, [Dz, Dsp, pim], Nmc)
-    elif mcfile[-9:-7] == "Bp":
+    elif mcfile.split('/')[-1][:2] == "Bp":
         pf = gen_mc(Bp, [Dm, Dsp, pip], Nmc)
     else:
         raise
@@ -81,63 +39,129 @@ def gen_mc_from_eff_map(mcfile, Nmc, eff_file):
     mc_four_momentum = mc_four_momentum.reshape(-1, 4)
     np.savetxt(mcfile, mc_four_momentum)
 
-def gen_toyBz(amp):
+def gen_toyBz(amp, config, gen_bkg_for_sfit=True):
     ndata = 633; nbg = 480; wbg = 0.131039;
+    md = "B0toD0Dspi"; ch = "B0toD0Dspi_Run1";
     mcfile = "toystudy/toy/BzMC1.dat"
     genfile = "toystudy/toy/BzData1.dat"
-    bgfile = "../dataDDspi/dat/B0toD0Dspi_BSB_Run1.dat"
-    efffile = "../dataDDspi/B0toD0Dspi/EffMapCorr/EffMap_B0toD0Dspi_Run1.root"
+    efffile = f"../dataDDspi/{md}/EffMapCorr/EffMap_{ch}.root"
+    bkgpdf = DatWeight(f"../dataDDspi/{md}/SidebandMap/BSBMap_{ch}_Smooth.root", "Hist_pos")
+    #bgfile = "../dataDDspi/dat/B0toD0Dspi_BSB_Run1.dat"
+    bgfile = "toystudy/toy/BzBKG1.dat"
     gen_mc_from_eff_map(mcfile, ndata*100, efffile)
+    if nbg*wbg != 0: # only nbg*wbg is used, in blending such amount of bkg into data
+        gen_bkg_sample(bgfile, int(100*nbg*wbg), config, bkgpdf, "Bz", md)
     gen_data(amp, ndata, mcfile=mcfile, genfile=genfile, Poisson_fluc=True, Nbg=nbg, wbg=wbg, bgfile=bgfile)
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
+    if gen_bkg_for_sfit and nbg*wbg != 0: # generate bkg sample again for bkg subtraction in sfit
+        fourmom = gen_bkg_sample(bgfile, int(10*nbg), config, bkgpdf, "Bz", md)
+        nsb = nbg # np.random.poisson(nbg)
+        if len(fourmom) < 3*nsb:
+            raise Exception("$$$ not enough bkg MC sample")
+        np.savetxt(bgfile, fourmom[:3*nsb])
 
     ndata = 2753; nbg = 2047; wbg = 0.103967;
+    md = "B0toD0Dspi"; ch = "B0toD0Dspi_Run2";
     mcfile = "toystudy/toy/BzMC2.dat"
     genfile = "toystudy/toy/BzData2.dat"
-    bgfile = "../dataDDspi/dat/B0toD0Dspi_BSB_Run2.dat"
-    efffile = "../dataDDspi/B0toD0Dspi/EffMapCorr/EffMap_B0toD0Dspi_Run2.root"
+    efffile = f"../dataDDspi/{md}/EffMapCorr/EffMap_{ch}.root"
+    bkgpdf = DatWeight(f"../dataDDspi/{md}/SidebandMap/BSBMap_{ch}_Smooth.root", "Hist_pos")
+    #bgfile = "../dataDDspi/dat/B0toD0Dspi_BSB_Run2.dat"
+    bgfile = "toystudy/toy/BzBKG2.dat"
     gen_mc_from_eff_map(mcfile, ndata*100, efffile)
+    if nbg*wbg != 0:
+        gen_bkg_sample(bgfile, int(100*nbg*wbg), config, bkgpdf, "Bz", md)
     gen_data(amp, ndata, mcfile=mcfile, genfile=genfile, Poisson_fluc=True, Nbg=nbg, wbg=wbg, bgfile=bgfile)
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
+    if gen_bkg_for_sfit and nbg*wbg != 0:
+        fourmom = gen_bkg_sample(bgfile, int(10*nbg), config, bkgpdf, "Bz", md)
+        nsb = nbg # np.random.poisson(nbg)
+        if len(fourmom) < 3*nsb:
+            raise Exception("$$$ not enough bkg MC sample")
+        np.savetxt(bgfile, fourmom[:3*nsb])
 
     ndata = 199; nbg = 133; wbg = 0.143792;
+    md = "B0toD0_K3piDspi"; ch = "B0toD0_K3piDspi_Run1";
     mcfile = "toystudy/toy/BzMC3.dat"
     genfile = "toystudy/toy/BzData3.dat"
-    bgfile = "../dataDDspi/dat/B0toD0_K3piDspi_BSB_Run1.dat"
-    efffile = "../dataDDspi/B0toD0_K3piDspi/EffMapCorr/EffMap_B0toD0_K3piDspi_Run1.root"
+    efffile = f"../dataDDspi/{md}/EffMapCorr/EffMap_{ch}.root"
+    bkgpdf = DatWeight(f"../dataDDspi/{md}/SidebandMap/BSBMap_{ch}_Smooth.root", "Hist_pos")
+    #bgfile = "../dataDDspi/dat/B0toD0_K3piDspi_BSB_Run1.dat"
+    bgfile = "toystudy/toy/BzBKG3.dat"
     gen_mc_from_eff_map(mcfile, ndata*100, efffile)
+    if nbg*wbg != 0:
+        gen_bkg_sample(bgfile, int(100*nbg*wbg), config, bkgpdf, "Bz", md)
     gen_data(amp, ndata, mcfile=mcfile, genfile=genfile, Poisson_fluc=True, Nbg=nbg, wbg=wbg, bgfile=bgfile)
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
+    if gen_bkg_for_sfit and nbg*wbg != 0:
+        fourmom = gen_bkg_sample(bgfile, int(10*nbg), config, bkgpdf, "Bz", md)
+        nsb = nbg # np.random.poisson(nbg)
+        if len(fourmom) < 3*nsb:
+            raise Exception("$$$ not enough bkg MC sample")
+        np.savetxt(bgfile, fourmom[:3*nsb])
 
     ndata = 835; nbg = 969; wbg = 0.106173;
+    md = "B0toD0_K3piDspi"; ch = "B0toD0_K3piDspi_Run2";
     mcfile = "toystudy/toy/BzMC4.dat"
     genfile = "toystudy/toy/BzData4.dat"
-    bgfile = "../dataDDspi/dat/B0toD0_K3piDspi_BSB_Run2.dat"
-    efffile = "../dataDDspi/B0toD0_K3piDspi/EffMapCorr/EffMap_B0toD0_K3piDspi_Run2.root"
+    efffile = f"../dataDDspi/{md}/EffMapCorr/EffMap_{ch}.root"
+    bkgpdf = DatWeight(f"../dataDDspi/{md}/SidebandMap/BSBMap_{ch}_Smooth.root", "Hist_pos")
+    #bgfile = "../dataDDspi/dat/B0toD0_K3piDspi_BSB_Run2.dat"
+    bgfile = "toystudy/toy/BzBKG4.dat"
     gen_mc_from_eff_map(mcfile, ndata*100, efffile)
+    if nbg*wbg != 0:
+        gen_bkg_sample(bgfile, int(100*nbg*wbg), config, bkgpdf, "Bz", md)
     gen_data(amp, ndata, mcfile=mcfile, genfile=genfile, Poisson_fluc=True, Nbg=nbg, wbg=wbg, bgfile=bgfile)
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
+    if gen_bkg_for_sfit and nbg*wbg != 0:
+        fourmom = gen_bkg_sample(bgfile, int(10*nbg), config, bkgpdf, "Bz", md)
+        nsb = nbg # np.random.poisson(nbg)
+        if len(fourmom) < 3*nsb:
+            raise Exception("$$$ not enough bkg MC sample")
+        np.savetxt(bgfile, fourmom[:3*nsb])
 
-def gen_toyBp(amp):
+def gen_toyBp(amp, config, gen_bkg_for_sfit=True):
     ndata = 797; nbg = 407; wbg = 0.0861442;
+    md = "BptoDmDspi"; ch = "BptoDmDspi_Run1";
     mcfile = "toystudy/toy/BpMC1.dat"
     genfile = "toystudy/toy/BpData1.dat"
-    bgfile = "../dataDDspi/dat/BptoDmDspi_BSB_Run1.dat"
-    efffile = "../dataDDspi/BptoDmDspi/EffMapCorr/EffMap_BptoDmDspi_Run1.root"
+    efffile = f"../dataDDspi/{md}/EffMapCorr/EffMap_{ch}.root"
+    bkgpdf = DatWeight(f"../dataDDspi/{md}/SidebandMap/BSBMap_{ch}_Smooth.root", "Hist_pos")
+    #bgfile = "../dataDDspi/dat/BptoDmDspi_BSB_Run1.dat"
+    bgfile = "toystudy/toy/BpBKG1.dat"
     gen_mc_from_eff_map(mcfile, ndata*100, efffile)
+    if nbg*wbg != 0:
+        gen_bkg_sample(bgfile, int(100*nbg*wbg), config, bkgpdf, "Bp", md)
     gen_data(amp, ndata, mcfile=mcfile, genfile=genfile, Poisson_fluc=True, Nbg=nbg, wbg=wbg, bgfile=bgfile)
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
+    if gen_bkg_for_sfit and nbg*wbg != 0:
+        fourmom = gen_bkg_sample(bgfile, int(10*nbg), config, bkgpdf, "Bp", md)
+        nsb = nbg # np.random.poisson(nbg)
+        if len(fourmom) < 3*nsb:
+            raise Exception("$$$ not enough bkg MC sample")
+        np.savetxt(bgfile, fourmom[:3*nsb])
 
     ndata = 3143; nbg = 2471; wbg = 0.0554937;
+    md = "BptoDmDspi"; ch = "BptoDmDspi_Run2";
     mcfile = "toystudy/toy/BpMC2.dat"
     genfile = "toystudy/toy/BpData2.dat"
-    bgfile = "../dataDDspi/dat/BptoDmDspi_BSB_Run2.dat"
-    efffile = "../dataDDspi/BptoDmDspi/EffMapCorr/EffMap_BptoDmDspi_Run2.root"
+    efffile = f"../dataDDspi/{md}/EffMapCorr/EffMap_{ch}.root"
+    bkgpdf = DatWeight(f"../dataDDspi/{md}/SidebandMap/BSBMap_{ch}_Smooth.root", "Hist_pos")
+    #bgfile = "../dataDDspi/dat/BptoDmDspi_BSB_Run2.dat"
+    bgfile = "toystudy/toy/BpBKG2.dat"
     gen_mc_from_eff_map(mcfile, ndata*100, efffile)
+    if nbg*wbg != 0:
+        gen_bkg_sample(bgfile, int(100*nbg*wbg), config, bkgpdf, "Bp", md)
     gen_data(amp, ndata, mcfile=mcfile, genfile=genfile, Poisson_fluc=True, Nbg=nbg, wbg=wbg, bgfile=bgfile)
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
+    if gen_bkg_for_sfit and nbg*wbg != 0:
+        fourmom = gen_bkg_sample(bgfile, int(10*nbg), config, bkgpdf, "Bp", md)
+        nsb = nbg # np.random.poisson(nbg)
+        if len(fourmom) < 3*nsb:
+            raise Exception("$$$ not enough bkg MC sample")
+        np.savetxt(bgfile, fourmom[:3*nsb])
 
-def gen_weigths_for_cfit(mode, config):
+def gen_weigths_for_cfit(mode, config): # can be provided by dat_cfit.py
     if mode == "Bz":
         channels = ["B0toD0Dspi_Run1", "B0toD0Dspi_Run2", "B0toD0_K3piDspi_Run1", "B0toD0_K3piDspi_Run2"]
     elif mode == "Bp":
@@ -161,6 +185,7 @@ def gen_weigths_for_cfit(mode, config):
         wbkg = bkg.weight(*SqDvars)
         weff = eff.weight(*Dvars, eff_0_correct=True)
         np.savetxt(save_file, wbkg/weff)
+
 
 def set_same_D1(config): # set the total parameter of D1_2010 and D1_2007 to be the same in fitting
     try:
@@ -203,8 +228,8 @@ def sig_test(sfit=True, cfit=True, null="", alternative="Z0", param_file=None, f
         config = MultiConfig([f"toystudy/CtoyBz{null}.yml", f"toystudy/CtoyBp{null}.yml"], total_same=True)
     config.set_params(param_file)
     ampBz, ampBp = config.get_amplitudes()
-    gen_toyBz(ampBz)
-    gen_toyBp(ampBp)
+    gen_toyBz(ampBz, config.configs[0])
+    gen_toyBp(ampBp, config.configs[1])
     Sdnll = 0
     Cdnll = 0
     if sfit:
@@ -245,7 +270,7 @@ def main(Ntoy):
     CdNLL = []
     for i in range(Ntoy):
         print("##### Start toy {}".format(i))
-        Sdnll, Cdnll = sig_test(sfit=True, cfit=False, null="", alternative="Z0", param_file="toystudy/params/base_s.json") # edit
+        Sdnll, Cdnll = sig_test(sfit=False, cfit=True, null="", alternative="Z0", param_file="toystudy/params/base_s.json") # edit
         print("$$$$$dnll:", Sdnll, Cdnll)
         SdNLL.append(Sdnll)
         CdNLL.append(Cdnll)

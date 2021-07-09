@@ -10,8 +10,8 @@ def param_pulls(i, base="", param_file=None, sfit=True, cfit=True, **kwargs):
     Sconfig = MultiConfig([f"toystudy/StoyBz{base}.yml", f"toystudy/StoyBp{base}.yml"], total_same=True, vm=vm)
     Sconfig.set_params(param_file)
     ampBz, ampBp = Sconfig.get_amplitudes()
-    gen_toyBz(ampBz)
-    gen_toyBp(ampBp)
+    gen_toyBz(ampBz, Sconfig.configs[0])
+    gen_toyBp(ampBp, Sconfig.configs[1])
     if i == 0:
         for v in vm.trainable_vars:
             fp_s[v]=[]
@@ -86,5 +86,5 @@ if __name__ == "__main__":
     print(f"$$$$$ Start fit {Ntoy} toys")
     for i in range(Ntoy):
         # edit below
-        param_pulls(i, base="Z0", param_file="../DDspi/save/baseZ0_c/final_params_xy.json", sfit=True, cfit=True, fitloop=1)
+        param_pulls(i, base="MD", param_file="../DDspi/save/MD_s/final_params_xy.json", sfit=True, cfit=True, fitloop=1)
 

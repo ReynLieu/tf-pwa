@@ -48,6 +48,7 @@ class PhaseSpaceGenerator(object):
 
         :return:   daughters 4-momentum, list of ndarray with shape (n_iter, 4)
         """
+        assert isinstance(n_iter, int)
         n_gen = 0
         n_total = n_iter
 
