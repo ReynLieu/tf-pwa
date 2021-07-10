@@ -87,10 +87,10 @@ def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500, xycoord=
         try:
             if xycoord == 2: # fit in xy
                 vm.rp2xy_all()
-            vm.std_polar_all()
             fit_result = config.fit(
                 batch=65000, method=method, maxiter=maxiter
             )
+            vm.std_polar_all()
         except KeyboardInterrupt:
             config.save_params("break_params.json")
             raise

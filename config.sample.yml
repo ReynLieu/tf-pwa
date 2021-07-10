@@ -155,7 +155,7 @@ plot:
 data:
     model: cfit
     dat_order: [D, Ds, Pi]
-    bg_frac: [0.131039, 0.103967, 0.143792, 0.106173]
+    bg_frac: [0.09936606635, 0.07730492154, 0.09610219095, 0.1232115413]
     data_bg_value: ["../dataDDspi/dat_cfit/B0toD0Dspi_Data_Run1_value.dat", "../dataDDspi/dat_cfit/B0toD0Dspi_Data_Run2_value.dat", "../dataDDspi/dat_cfit/B0toD0_K3piDspi_Data_Run1_value.dat",  "../dataDDspi/dat_cfit/B0toD0_K3piDspi_Data_Run2_value.dat"]
     phsp_bg_value: ["../dataDDspi/dat_cfit/B0toD0Dspi_MC_Run1_value.dat", "../dataDDspi/dat_cfit/B0toD0Dspi_MC_Run2_value.dat", "../dataDDspi/dat_cfit/B0toD0_K3piDspi_MC_Run1_value.dat",  "../dataDDspi/dat_cfit/B0toD0_K3piDspi_MC_Run2_value.dat"]
     #data_eff_value: "toy_data/data_eff_value.dat"
@@ -335,7 +335,7 @@ plot:
 data:
     model: cfit
     dat_order: [D, Ds, Pi]
-    bg_frac: [0.0861442, 0.0554937]
+    bg_frac: [0.04399082735, 0.04362867728]
     data_bg_value: ["../dataDDspi/dat_cfit/BptoDmDspi_Data_Run1_value.dat", "../dataDDspi/dat_cfit/BptoDmDspi_Data_Run2_value.dat"]
     phsp_bg_value: ["../dataDDspi/dat_cfit/BptoDmDspi_MC_Run1_value.dat", "../dataDDspi/dat_cfit/BptoDmDspi_MC_Run2_value.dat"]
     #data_eff_value: "toy_data/data_eff_value.dat"

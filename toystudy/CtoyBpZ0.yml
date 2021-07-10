@@ -2,7 +2,7 @@
 data:
     model: cfit
     dat_order: [D, Ds, Pi]
-    bg_frac: [0.0861442, 0.0554937]
+    bg_frac: [0.030461068114682886, 0.037890282591876205]
     data_bg_value: ["toystudy/toy/BpData1_value.dat", "toystudy/toy/BpData2_value.dat"]
     phsp_bg_value: ["toystudy/toy/BpMC1_value.dat", "toystudy/toy/BpMC2_value.dat"]
 
@@ -62,20 +62,23 @@ particle:
             P: -1
     $include: Resonances.sample.yml
     BpR_DDs: []
+        #- DDs
     BpR_DsPi: []
-    Z0: {J: 0, Par: 1, float: mg, m0: 2.879, g0: 0.109, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+        #- DsPi
+    Z0: {J: 0, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
-    Z2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
-    Z3: [] #{J: 3, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.01, g_max: 0.5,}
+    Z2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.001, g_max: 0.5,}
+    Z3: [] #{J: 3, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.001, g_max: 0.5,}
     BpR_DPi:
-        #- D0_2300o
-        #- D0_2900
         - D2_2460
         - D1_2600
+        #- D0_2300
+        #- D0_2900
         #- D3_2750
         #- D1_2760
         #- DJ_2640
         #- DJ_3000
+        #- Dstar
     D1_2007: {J: 1, Par: -1, m0: 2.00685, g0: 0.0001, model: BW2007}
 
     NR_DPi0: [] #{display: "NR(0+)(D-pi+)", J: 0, P: 1, mass: 2.4, model: exp2}
@@ -84,8 +87,8 @@ particle:
         #model: interp_hist, points: [1.95, 2.0, 2.05, 2.1, 2.15, 2.2, 2.25, 2.3, 2.35, 2.4, 2.42, 2.44, 2.46, 2.48, 2.5, 2.55, 2.6, 2.65, 2.7, 2.75, 2.85, 2.95, 3.05, 3.15, 3.25, 3.35]} #max_m: 3.35, min_m: 1.95, interp_N: 29}
     DPi_P: [] #{J: 1, P: -1, mass: 2.65, #model: interp_hist, max_m: 3.4, min_m: 2.0, interp_N: 15}
                 #model: spline_c, points: [1.95, 2.05, 2.15, 2.25, 2.35, 2.45, 2.55, 2.65, 2.75, 2.85, 2.95, 3.05, 3.15, 3.25, 3.4]}
-    Z0hist: [] #{J: 0, P: 1, mass: 2.970, model: interp_hist, points: [2.690,2.756,2.822,2.888,2.954,3.020,3.086,3.151,3.217]}#[2.693,2.759,2.824,2.890,2.956,3.021,3.087,3.153,3.219]}
-    Z1hist: [] #{J: 1, P: -1, mass: 2.868, model: interp_hist, points: [2.518,2.609,2.700,2.791,2.881,2.972,3.063,3.154,3.245]}#[2.437,2.544,2.652,2.760,2.868,2.975,3.083,3.191,3.299]}
+    Z0hist: [] #{J: 0, P: 1, mass: 2.970, model: interp_hist, points: [2.673,2.740,2.807,2.873,2.940,3.007,3.073,3.140,3.207]}#[2.693,2.759,2.824,2.890,2.956,3.021,3.087,3.153,3.219]}
+    Z1hist: [] #{J: 1, P: -1, mass: 2.879, model: interp_hist, points: [2.525,2.614,2.702,2.791,2.879,2.968,3.056,3.145,3.234]}#[2.437,2.544,2.652,2.760,2.868,2.975,3.083,3.191,3.299]}
 
 # constrains for params [WIP]
 constrains:
@@ -101,29 +104,35 @@ plot:
     mass:
         BpR_DDs:
             display: "$M_{D^-D_s^+}$"
-            legend: True
+            #legend: False
+            #yscale: log
             #trans: x*x
         BpR_DPi:
             display: "$M_{D^-\\pi^+}$"
-            legend: True
+            #legend: False
+            #yscale: log
             #trans: x*x
         BpR_DsPi:
             display: "$M_{D_s^+\\pi^+}$"
-            legend: True
+            #legend: False
+            #yscale: log
             #trans: x*x
     angle:
         BpR_DPi/D:
             cos(beta):
                 display: "$\\cos(\\theta^{D^-\\pi^+}_{D^-})$"
                 range: [-1, 1]
+                yscale: log
         BpR_DsPi/Ds:
             cos(beta):
                 display: "$\\cos(\\theta^{D_s^+\\pi^+}_{D_s^+})$"
                 range: [-1, 1]
+                yscale: log
         BpR_DDs/D:
             cos(beta):
                 display: "$\\cos(\\theta^{D^-D_s^+}_{D^-})$"
                 range: [-1, 1]
+                yscale: log
     # 2D plot
     2Dplot:
         m_BpR_DPi & m_BpR_DsPi:
