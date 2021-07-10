@@ -42,9 +42,9 @@ def fit_toy(config, i, param_file, amps, vm, sc="sfit", fitloop=1):
         config.reinit_params()
         fit_res = config.fit(batch=150000, method="BFGS")
         if fit_res.success and (fit_res.min_nll < fit_result.min_nll):
-            fit_result = fit_res
             if fit_result.min_nll - fit_res.min_nll > 1e-6:
                 print("$$$ New Min Found")
+            fit_result = fit_res
     config.set_params(fit_result.params)
     improveNLL = (initNLL - fit_result.min_nll).numpy()
     '''for amp in amps:

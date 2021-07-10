@@ -44,8 +44,8 @@ class DatWeight:
                         if tmp_val > 0:
                             tmp += tmp_val
                             n += 1
-                if n == 0:
-                    #print("$#@ check new_vals[idx] = 0 in dat_cfit.py")
+                if n == 0: # for "Bz" m13<2.05 will be in this case
+                    #print(f"$@$ eff point x{x_idx[idx]} y{y_idx[idx]} is 0")
                     new_vals[idx] = 0
                 else:
                     new_vals[idx] = tmp/n
@@ -82,6 +82,8 @@ def gen_bkg_sample(bkg_file, Nsample, config, bkg_pdf, mode, md): # generate bkg
     maxbkgval = np.max(bkg_pdf.values)
     uni_rdm = np.random.uniform(0, maxbkgval, Nsample)
     wbkg = bkg_pdf.weight(*SqDvars)
+    if mode == "Bz":
+        wbkg[Dvars[0]<2.05**2] = 0 # the bin width of bkg_map may not be precise enough
     pf = pf.reshape(-1, 3, 4)
     bkg_four_momentum = pf[wbkg>uni_rdm]
     Nbgsample = len(bkg_four_momentum)
