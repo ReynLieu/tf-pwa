@@ -241,7 +241,7 @@ def gen_data(
     :param genfile: String. The file to store the generated toy.
     :return: tensorflow.Tensor. The generated toy data.
     """
-    Nbg = round(wbg * Nbg)
+    Nbg = wbg * Nbg #round(wbg * Nbg)
     Nmc = Ndata - Nbg  # 8065-3445*0.768331
     if Poisson_fluc:  # Poisson
         Nmc = np.random.poisson(Nmc)

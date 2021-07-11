@@ -55,7 +55,7 @@ def gen_toyBz(amp, config, gen_bkg_for_sfit=True):
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
     if gen_bkg_for_sfit and nbg*wbg != 0: # generate bkg sample again for bkg subtraction in sfit
         fourmom = gen_bkg_sample(bgfile, int(10*nbg), config, bkgpdf, "Bz", md)
-        nsb = nbg # np.random.poisson(nbg)
+        nsb = np.random.poisson(nbg)
         if len(fourmom) < 3*nsb:
             raise Exception("$$$ not enough bkg MC sample")
         np.savetxt(bgfile, fourmom[:3*nsb])
@@ -75,7 +75,7 @@ def gen_toyBz(amp, config, gen_bkg_for_sfit=True):
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
     if gen_bkg_for_sfit and nbg*wbg != 0:
         fourmom = gen_bkg_sample(bgfile, int(10*nbg), config, bkgpdf, "Bz", md)
-        nsb = nbg # np.random.poisson(nbg)
+        nsb = np.random.poisson(nbg)
         if len(fourmom) < 3*nsb:
             raise Exception("$$$ not enough bkg MC sample")
         np.savetxt(bgfile, fourmom[:3*nsb])
@@ -95,7 +95,7 @@ def gen_toyBz(amp, config, gen_bkg_for_sfit=True):
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
     if gen_bkg_for_sfit and nbg*wbg != 0:
         fourmom = gen_bkg_sample(bgfile, int(10*nbg), config, bkgpdf, "Bz", md)
-        nsb = nbg # np.random.poisson(nbg)
+        nsb = np.random.poisson(nbg)
         if len(fourmom) < 3*nsb:
             raise Exception("$$$ not enough bkg MC sample")
         np.savetxt(bgfile, fourmom[:3*nsb])
@@ -115,7 +115,7 @@ def gen_toyBz(amp, config, gen_bkg_for_sfit=True):
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
     if gen_bkg_for_sfit and nbg*wbg != 0:
         fourmom = gen_bkg_sample(bgfile, int(10*nbg), config, bkgpdf, "Bz", md)
-        nsb = nbg # np.random.poisson(nbg)
+        nsb = np.random.poisson(nbg)
         if len(fourmom) < 3*nsb:
             raise Exception("$$$ not enough bkg MC sample")
         np.savetxt(bgfile, fourmom[:3*nsb])
@@ -136,7 +136,7 @@ def gen_toyBp(amp, config, gen_bkg_for_sfit=True):
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
     if gen_bkg_for_sfit and nbg*wbg != 0:
         fourmom = gen_bkg_sample(bgfile, int(10*nbg), config, bkgpdf, "Bp", md)
-        nsb = nbg # np.random.poisson(nbg)
+        nsb = np.random.poisson(nbg)
         if len(fourmom) < 3*nsb:
             raise Exception("$$$ not enough bkg MC sample")
         np.savetxt(bgfile, fourmom[:3*nsb])
@@ -156,7 +156,7 @@ def gen_toyBp(amp, config, gen_bkg_for_sfit=True):
     gen_mc_from_eff_map(mcfile, ndata*50, efffile)
     if gen_bkg_for_sfit and nbg*wbg != 0:
         fourmom = gen_bkg_sample(bgfile, int(10*nbg), config, bkgpdf, "Bp", md)
-        nsb = nbg # np.random.poisson(nbg)
+        nsb = np.random.poisson(nbg)
         if len(fourmom) < 3*nsb:
             raise Exception("$$$ not enough bkg MC sample")
         np.savetxt(bgfile, fourmom[:3*nsb])
