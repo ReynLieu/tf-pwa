@@ -1,5 +1,6 @@
 from toy_fit import *
 from tf_pwa.variable import VarsManager
+from tf_pwa.applications import fit_fractions
 
 
 def param_pulls(i, base="", param_file=None, sfit=True, cfit=True, **kwargs):
@@ -12,12 +13,20 @@ def param_pulls(i, base="", param_file=None, sfit=True, cfit=True, **kwargs):
     ampBz, ampBp = Sconfig.get_amplitudes()
     gen_toyBz(ampBz, Sconfig.configs[0])
     gen_toyBp(ampBp, Sconfig.configs[1])
-    if i == 0:
+    if i == 0: # initialization
         for v in vm.trainable_vars:
             fp_s[v]=[]
             fe_s[v]=[]
             fp_c[v]=[]
             fe_c[v]=[]
+        for j, amp in enumerate([ampBz, ampBp]):
+            for reson in amp.res:
+                ffp_s[j][reson] = []
+                ffe_s[j][reson] = []
+                ffp_c[j][reson] = []
+                ffe_c[j][reson] = []
+        print("$$$", ffp_s)
+        print("$$$", ffe_c)
 
     if sfit:
         fit_toy(Sconfig, i, param_file, [ampBz,ampBp], vm, sc="sfit", **kwargs)
@@ -58,30 +67,55 @@ def fit_toy(config, i, param_file, amps, vm, sc="sfit", fitloop=1):
     fit_result.set_error(fit_error)
 
     if sc == "sfit":
-        for v in vm.trainable_vars:
-            fp_s[v].append(fit_result.params[v])
-            fe_s[v].append(fit_result.error[v])
-        impNLL_s.append(improveNLL)
-        print(f"@@@@@{sc} values{i}\n{fp_s}")
-        print(f"@@@@@{sc} errors{i}\n{fe_s}")
-        print(f"@@@@@{sc} change in NLL{i}\n{impNLL_s}")
+        fp = fp_s
+        fe = fe_s
+        impNLL = impNLL_s
+        ffp = ffp_s
+        ffe = ffe_s
     elif sc == "cfit":
-        for v in vm.trainable_vars:
-            fp_c[v].append(fit_result.params[v])
-            fe_c[v].append(fit_result.error[v])
-        impNLL_c.append(improveNLL)
-        print(f"@@@@@{sc} values{i}\n{fp_c}")
-        print(f"@@@@@{sc} errors{i}\n{fe_c}")
-        print(f"@@@@@{sc} change in NLL{i}\n{impNLL_c}")
+        fp = fp_c
+        fe = fe_c
+        impNLL = impNLL_c
+        ffp = ffp_c
+        ffe = ffe_c
+    for v in vm.trainable_vars:
+        fp[v].append(fit_result.params[v])
+        fe[v].append(fit_result.error[v])
+    impNLL.append(improveNLL)
+    print(f"@@@@@{sc} values{i}\n{fp}")
+    print(f"@@@@@{sc} errors{i}\n{fe}")
+    print(f"@@@@@{sc} change in NLL{i}\n{impNLL}")
+    cal_fit_frac(config, fit_result, amps, i, ffp, ffe)
+    print(f"@###@{sc} Bz fit-frac values{i}\n{ffp[0]}")
+    print(f"@###@{sc} Bz fit-frac errors{i}\n{ffe[0]}")
+    print(f"@###@{sc} Bp fit-frac values{i}\n{ffp[1]}")
+    print(f"@###@{sc} Bp fit-frac errors{i}\n{ffe[1]}")
+
+def cal_fit_frac(config, fit_result, amps, i, ffp, ffe):
+    for it, config_i in enumerate(config.configs):
+        mcdata = config_i.get_phsp_noeff()
+        fit_frac, err_frac = fit_fractions(
+            config_i.get_amplitude(),
+            mcdata,
+            config.inv_he,
+            fit_result.params,
+        )
+        for reson in amps[it].res:
+            ffp[it][reson].append(fit_frac[reson.name])
+            ffe[it][reson].append(err_frac[reson.name])
 
 
 if __name__ == "__main__":
-    Ntoy = 100 # edit
+    Ntoy = 200 # edit
     fp_s = {}
     fe_s = {}
+    ffp_s = [{}, {}] # fitfraction [Bz, Bp]
+    ffe_s = [{}, {}]
     impNLL_s = []
     fp_c = {}
     fe_c = {}
+    ffp_c = [{}, {}]
+    ffe_c = [{}, {}]
     impNLL_c = []
     print(f"$$$$$ Start fit {Ntoy} toys")
     for i in range(Ntoy):

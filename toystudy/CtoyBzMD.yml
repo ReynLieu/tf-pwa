@@ -8,7 +8,8 @@ data:
     
     data: [["toystudy/toy/BzData1.dat"], ["toystudy/toy/BzData2.dat"],["toystudy/toy/BzData3.dat"], ["toystudy/toy/BzData4.dat"]]
     phsp: [["toystudy/toy/BzMC1.dat"], ["toystudy/toy/BzMC2.dat"],["toystudy/toy/BzMC3.dat"], ["toystudy/toy/BzMC4.dat"]]
-    cached_amp: True
+    #cached_amp: True
+    phsp_noeff: ["../dataDDspi/dat/B0toD0Dspi_MC_Noeff.dat"]
 
 
 decay:

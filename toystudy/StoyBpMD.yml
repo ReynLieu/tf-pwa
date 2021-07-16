@@ -5,7 +5,8 @@ data:
     phsp: [["toystudy/toy/BpMC1.dat"], ["toystudy/toy/BpMC2.dat"]]
     bg: [["toystudy/toy/BpBKG1.dat"], ["toystudy/toy/BpBKG2.dat"]]
     bg_weight: [0.0861442, 0.0554937]
-    cached_amp: True
+    #cached_amp: True
+    phsp_noeff: ["../dataDDspi/dat/BptoDmDspi_MC_Noeff.dat"]
 
 
 decay:

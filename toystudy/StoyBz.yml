@@ -6,6 +6,7 @@ data:
     bg: [["toystudy/toy/BzBKG1.dat"], ["toystudy/toy/BzBKG2.dat"],["toystudy/toy/BzBKG3.dat"], ["toystudy/toy/BzBKG4.dat"]]
     bg_weight: [0.131039, 0.103967, 0.143792, 0.106173]
     cached_amp: True
+    phsp_noeff: ["../dataDDspi/dat/B0toD0Dspi_MC_Noeff.dat"]
 
 
 decay:

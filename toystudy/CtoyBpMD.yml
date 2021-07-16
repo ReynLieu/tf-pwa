@@ -2,13 +2,14 @@
 data:
     model: cfit
     dat_order: [D, Ds, Pi]
-    bg_frac: [0.030461068114682886, 0.037890282591876205]
+    bg_frac: [0.04399082735, 0.04362867728]
     data_bg_value: ["toystudy/toy/BpData1_value.dat", "toystudy/toy/BpData2_value.dat"]
     phsp_bg_value: ["toystudy/toy/BpMC1_value.dat", "toystudy/toy/BpMC2_value.dat"]
 
     data: [["toystudy/toy/BpData1.dat"], ["toystudy/toy/BpData2.dat"]]
     phsp: [["toystudy/toy/BpMC1.dat"], ["toystudy/toy/BpMC2.dat"]]
-    cached_amp: True
+    #cached_amp: True
+    phsp_noeff: ["../dataDDspi/dat/BptoDmDspi_MC_Noeff.dat"]
 
 
 decay:
