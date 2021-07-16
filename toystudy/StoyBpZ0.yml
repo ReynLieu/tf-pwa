@@ -81,7 +81,7 @@ particle:
 
     NR_DPi0: [] #{display: "NR(0+)(D-pi+)", J: 0, P: 1, mass: 2.4, model: exp2}
     NR_DPi1: [] #{display: "NR(1-)(D-pi+)", J: 1, P: -1, mass: 2.4, model: one}
-    DPi_S: {J: 0, P: 1, mass: 2.65, fix_idx: 4, model: spline_c, points: [1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.9, 3.4]}
+    DPi_S: {J: 0, P: 1, mass: 2.65, fix_idx: 4, model: spline_c, points: [1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 3.0, 3.2, 3.4]}
         #model: interp_hist, points: [1.95, 2.0, 2.05, 2.1, 2.15, 2.2, 2.25, 2.3, 2.35, 2.4, 2.42, 2.44, 2.46, 2.48, 2.5, 2.55, 2.6, 2.65, 2.7, 2.75, 2.85, 2.95, 3.05, 3.15, 3.25, 3.35]} #max_m: 3.35, min_m: 1.95, interp_N: 29}
     DPi_P: [] #{J: 1, P: -1, mass: 2.65, #model: interp_hist, max_m: 3.4, min_m: 2.0, interp_N: 15}
                 #model: spline_c, points: [1.95, 2.05, 2.15, 2.25, 2.35, 2.45, 2.55, 2.65, 2.75, 2.85, 2.95, 3.05, 3.15, 3.25, 3.4]}
@@ -120,17 +120,17 @@ plot:
             cos(beta):
                 display: "$\\cos(\\theta^{D^-\\pi^+}_{D^-})$"
                 range: [-1, 1]
-                yscale: log
+                #yscale: log
         BpR_DsPi/Ds:
             cos(beta):
                 display: "$\\cos(\\theta^{D_s^+\\pi^+}_{D_s^+})$"
                 range: [-1, 1]
-                yscale: log
+                #yscale: log
         BpR_DDs/D:
             cos(beta):
                 display: "$\\cos(\\theta^{D^-D_s^+}_{D^-})$"
                 range: [-1, 1]
-                yscale: log
+                #yscale: log
     # 2D plot
     2Dplot:
         m_BpR_DPi & m_BpR_DsPi:

@@ -120,5 +120,5 @@ if __name__ == "__main__":
     print(f"$$$$$ Start fit {Ntoy} toys")
     for i in range(Ntoy):
         # edit below
-        param_pulls(i, base="MD", param_file="../DDspi/save/MD_s/final_params_xy.json", sfit=True, cfit=True, fitloop=1)
+        param_pulls(i, base="MD", param_file="../DDspi/savec/MDZ0_c/final_params_xy.json", sfit=True, cfit=True, fitloop=1)
 

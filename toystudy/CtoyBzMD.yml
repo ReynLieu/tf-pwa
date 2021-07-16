@@ -66,7 +66,7 @@ particle:
         #- DDs
     BzR_DsPi: []
         #- DsPi
-    Z0: [] #{J: 0, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
+    Z0: {J: 0, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z1: [] #{J: 1, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.7, m_max: 3.2, g_min: 0.01, g_max: 0.5,}
     Z2: [] #{J: 2, Par: 1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.001, g_max: 0.5,}
     Z3: [] #{J: 3, Par: -1, float: mg, m0: 2.9, g0: 0.10, m_min: 2.1, m_max: 3.4, g_min: 0.001, g_max: 0.5,}
@@ -123,17 +123,17 @@ plot:
             cos(beta):
                 display: "$\\cos(\\theta^{\\bar D^0\\pi^-}_{\\bar D^0})$"
                 range: [-1, 1]
-                yscale: log
+                #yscale: log
         BzR_DsPi/Ds:
             cos(beta):
                 display: "$\\cos(\\theta^{D_s^+\\pi^-}_{D_s^+})$"
                 range: [-1, 1]
-                yscale: log
+                #yscale: log
         BzR_DDs/D:
             cos(beta):
                 display: "$\\cos(\\theta^{\\bar D^0D_s^+}_{\\bar D^0})$"
                 range: [-1, 1]
-                yscale: log
+                #yscale: log
     # 2D plot
     2Dplot:
         m_BzR_DPi & m_BzR_DsPi:

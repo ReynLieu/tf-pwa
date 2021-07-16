@@ -120,17 +120,17 @@ plot:
             cos(beta):
                 display: "$\\cos(\\theta^{D^-\\pi^+}_{D^-})$"
                 range: [-1, 1]
-                yscale: log
+                #yscale: log
         BpR_DsPi/Ds:
             cos(beta):
                 display: "$\\cos(\\theta^{D_s^+\\pi^+}_{D_s^+})$"
                 range: [-1, 1]
-                yscale: log
+                #yscale: log
         BpR_DDs/D:
             cos(beta):
                 display: "$\\cos(\\theta^{D^-D_s^+}_{D^-})$"
                 range: [-1, 1]
-                yscale: log
+                #yscale: log
     # 2D plot
     2Dplot:
         m_BpR_DPi & m_BpR_DsPi:
