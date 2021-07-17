@@ -376,11 +376,11 @@ def _plot_partial_wave(
         "orange",
         "c",
         "salmon",
-        "lightskyblue"
+        "lightskyblue",
         "peru",
     ]
     linestyles = ["-", "--", "-.", ":"]
-    marker = ['o', 'v', 's', '^', 'd', '<', 'P', 'X', '>', 'D', 's', 'h', 'p']
+    marker = ['o', 'v', 's', '^', 'd', '<', 'P', '>', 'D', 'X', 's', 'h', 'p']
 
     data_weights = data_dict["data_weights"]
     if bg_dict:
@@ -483,7 +483,7 @@ def _plot_partial_wave(
                         linestyle=ls,
                         linewidth=1,
                         marker=marker[i],
-                        markersize=2, markevery=2,
+                        markersize=2.5, markevery=2,
                     )
                 else:
                     try:
@@ -494,7 +494,7 @@ def _plot_partial_wave(
                             label=label,
                             linewidth=1,
                             marker=marker[i],
-                            markersize=2, markevery=2,
+                            markersize=2.5, markevery=2,
                         )
                     except:
                         le3 = hist_i.draw(
@@ -503,7 +503,7 @@ def _plot_partial_wave(
                             label=label,
                             linewidth=1,
                             marker=marker[i],
-                            markersize=2, markevery=2,
+                            markersize=2.5, markevery=2,
                         )
             legends.append(le3[0])
             legends_label.append(label)
