@@ -11,6 +11,7 @@ import matplotlib
 matplotlib.use("agg")
 
 import tensorflow as tf
+import numpy as np
 
 # examples of custom particle model
 from tf_pwa.amp import simple_resonance, register_particle, Particle
@@ -35,10 +36,15 @@ from tf_pwa.breit_wigner import BWR, Bprime
 @register_particle("BW2007")
 class ParticleBW2007(Particle):
     def get_amp(self, data, data_c=None, **kwargs):
-        mass = self.get_mass()
+        mass = self.get_mass() # 2.00685
         width = self.get_width()
         q = data_c["|q|"]
-        q0 = 0.042580705388 # get_p(2.00685, 1.86483, 0.1349768)
+        q0 = 0.042580705388 # get_p(mass, 1.86483, 0.1349768)
+        '''mmin = 1.86965 + 0.13957039
+        mmax = 5.27934 - 1.96834
+        meff = 2.358391539393489 # mmin + (mmax-mmin)/2 * (1+np.tanh((mass-(mmin+mmax)/2)/(mmax-mmin)))'''
+        #q0 = 0.42485215283569866 # get_p(meff, 1.86483, 0.1349768)
+
         BWamp = BWR(data["m"], mass, width, q, q0, L=1, d=3.0)
         barrier_factor = q * Bprime(1, q, q0, d=3.0)
         return BWamp * tf.cast(barrier_factor, BWamp.dtype)
