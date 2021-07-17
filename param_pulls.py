@@ -21,10 +21,10 @@ def param_pulls(i, base="", param_file=None, sfit=True, cfit=True, **kwargs):
             fe_c[v]=[]
         for j, amp in enumerate([ampBz, ampBp]):
             for reson in amp.res:
-                ffp_s[j][reson] = []
-                ffe_s[j][reson] = []
-                ffp_c[j][reson] = []
-                ffe_c[j][reson] = []
+                ffp_s[j][reson.name] = []
+                ffe_s[j][reson.name] = []
+                ffp_c[j][reson.name] = []
+                ffe_c[j][reson.name] = []
         print("$$$", ffp_s)
         print("$$$", ffe_c)
 
@@ -101,8 +101,8 @@ def cal_fit_frac(config, fit_result, amps, i, ffp, ffe):
             fit_result.params,
         )
         for reson in amps[it].res:
-            ffp[it][reson].append(fit_frac[reson.name])
-            ffe[it][reson].append(err_frac[reson.name])
+            ffp[it][reson.name].append(fit_frac[reson.name])
+            ffe[it][reson.name].append(err_frac[reson.name])
 
 
 if __name__ == "__main__":

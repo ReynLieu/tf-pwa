@@ -126,7 +126,7 @@ def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500, xycoord=
     if maxiter is not 0:
         fit_error = config.get_params_error(fit_result, batch=13000)
         fit_result.set_error(fit_error)
-        fit_result.save_as("final_params.json")
+        #fit_result.save_as("final_params.json")
         pprint(fit_error)
 
         print("\n########## fit results:")
@@ -148,6 +148,7 @@ def write_some_results(config, fit_result, save_root=False):
     # calculate fit fractions
     phsp_noeff = config.get_phsp_noeff()
     fit_frac, err_frac = config.cal_fitfractions({}, phsp_noeff)
+    fitfrac = {}; errfrac = {}; 
 
     print("########## fit fractions")
     fit_frac_string = ""
@@ -156,6 +157,8 @@ def write_some_results(config, fit_result, save_root=False):
             name = "{}x{}".format(*i)
         else:
             name = i
+            fitfrac[name] = fit_frac[name]
+            errfrac[name] = err_frac[name]
         fit_frac_string += "{} {}\n".format(
             name, error_print(fit_frac[i], err_frac.get(i, None))
         )
@@ -165,6 +168,8 @@ def write_some_results(config, fit_result, save_root=False):
     from frac_table import frac_table
     frac_table(fit_frac_string)
     # chi2, ndf = config.cal_chi2(mass=["R_BC", "R_CD"], bins=[[2,2]]*4)
+    fit_result.set_fitfrac(fitfrac, errfrac)
+    return fit_result
 
 def write_some_results_combine(config, fit_result, save_root=False):
 
@@ -187,7 +192,7 @@ def write_some_results_combine(config, fit_result, save_root=False):
         #bg = [None, None]
         c.plot_partial_wave(fit_result, prefix="figure/", plot_pull=True, smooth=False, data=data, phsp=phsp, bg=bg, save_pdf=True)
         '''
-
+    fitfrac = []; errfrac = []; 
     for it, config_i in enumerate(config.configs):
         print("########## fit fractions {}:".format(it))
         print(f"nll{it}", config_i.get_fcn()({}).numpy())
@@ -198,12 +203,16 @@ def write_some_results_combine(config, fit_result, save_root=False):
             config.inv_he,
             fit_result.params,
         )
+        fitfrac.append({})
+        errfrac.append({})
         fit_frac_string = ""
         for i in fit_frac:
             if isinstance(i, tuple):
                 name = "{}x{}".format(*i)  # interference term
             else:
                 name = i  # fit fraction
+                fitfrac[it][name] = fit_frac[name]
+                errfrac[it][name] = err_frac[name]
             fit_frac_string += "{} {}\n".format(
                 name, error_print(fit_frac[i], err_frac.get(i, None))
             )
@@ -212,6 +221,8 @@ def write_some_results_combine(config, fit_result, save_root=False):
         save_frac_csv(f"fit_frac{it}_err.csv", err_frac)
         from frac_table import frac_table
         frac_table(fit_frac_string)
+    fit_result.set_fitfrac(fitfrac, errfrac)
+    return fit_result
 
 
 def save_frac_csv(file_name, fit_frac):
@@ -280,13 +291,14 @@ def main():
             config, vm, results.init, results.method, results.loop, results.maxiter, results.xycoord
         )
         if isinstance(config, ConfigLoader):
-            write_some_results(
+            fit_result = write_some_results(
                 config, fit_result, save_root=results.save_root
             )
         else:
-            write_some_results_combine(
+            fit_result = write_some_results_combine(
                 config, fit_result, save_root=results.save_root
             )
+        fit_result.save_as("final_params.json")
 
 
 if __name__ == "__main__":

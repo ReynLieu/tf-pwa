@@ -400,6 +400,8 @@ class FitResult(object):
         self.ndf = int(ndf)
         self.success = success
         self.hess_inv = hess_inv
+        self.fitfrac = {}
+        self.errfrac = {}
 
     def save_as(self, file_name, save_hess=False):
         s = {
@@ -410,6 +412,8 @@ class FitResult(object):
                 "NLL": self.min_nll,
                 "Ndf": self.ndf,
             },
+            "fitfrac": self.fitfrac,
+            "errfrac": self.errfrac,
         }
         if save_hess and self.hess_inv is not None:
             s["free_params"] = [str(i) for i in self.error]
@@ -419,3 +423,8 @@ class FitResult(object):
 
     def set_error(self, error):
         self.error = error.copy()
+
+    def set_fitfrac(self, fitfrac, errfrac=None):
+        self.fitfrac = fitfrac.copy()
+        if errfrac is not None:
+            self.errfrac = errfrac.copy()
