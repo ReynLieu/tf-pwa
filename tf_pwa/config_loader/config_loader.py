@@ -331,6 +331,7 @@ class ConfigLoader(BaseConfig):
 
                 gauss_constr = particle_config.get("gauss_constr", None)
                 if gauss_constr is not None:
+                    #gauss_constr = {"m": 0.010, "g": 0.023}
                     assert isinstance(gauss_constr, dict)
                     for k, v in gauss_constr.items():
                         if v:
@@ -339,6 +340,7 @@ class ConfigLoader(BaseConfig):
                             var0 = self.vm.get(full_name)
                             self.gauss_constr_dic[full_name] = (
                                 var0.value,
+                                #var0,
                                 v,
                             )
                         else:
