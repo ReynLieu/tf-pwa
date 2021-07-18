@@ -586,10 +586,7 @@ class ConfigLoader(BaseConfig):
     @time_print
     def fit(
         self,
-        data=None,
-        phsp=None,
-        bg=None,
-        inmc=None,
+        datas=None,
         batch=65000,
         method="BFGS",
         check_grad=False,
@@ -597,12 +594,13 @@ class ConfigLoader(BaseConfig):
         reweight=False,
         maxiter=None,
     ):
-        if data is None and phsp is None:
-            data, phsp, bg, inmc = self.get_all_data()
+        if datas is None:
+            datas = self.get_all_data()
             fcn = self.get_fcn(batch=batch)
         else:
-            fcn = self.get_fcn([data, phsp, bg, inmc], batch=batch)
-        # print("sss")
+            fcn = self.get_fcn(datas, batch=batch)
+        data, phsp, bg, inmc = datas
+
         amp = self.get_amplitude()
         print("decay chains included: ")
         for i in self.full_decay:

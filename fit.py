@@ -18,6 +18,7 @@ from tf_pwa.amp import simple_resonance, register_particle, Particle
 from tf_pwa.config_loader import ConfigLoader, MultiConfig
 from tf_pwa.experimental import extra_amp, extra_data
 from tf_pwa.utils import error_print, tuple_table
+from tf_pwa.data import data_cut
 
 
 @register_particle("exp2")
@@ -63,15 +64,27 @@ def load_config(config_file="config.yml", total_same=False):
     return MultiConfig(config_files, total_same=total_same)
 
 
+cut_string = "" #"(m<2.7)"
 def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500, xycoord=0):
     """
     simple fit script
     """
-    # load config.yml
-    # config = ConfigLoader(config_file)
-
     # load data
-    all_data = config.get_all_data()
+    if not cut_string:
+        all_data = config.get_all_data()
+    else:
+        datas1, datas2 = config.get_all_data()
+        cut_datas1 = []; cut_datas2 = []
+        for data in datas1:
+            if data[0] is not None:
+                data = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in data]
+            cut_datas1.append(data)
+        for data in datas2:
+            if data[0] is not None:
+                data = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in data]
+            cut_datas2.append(data)
+        all_data = [cut_datas1, cut_datas2]
+        
     if xycoord == 1: # use xy init_params and fit in xy
         vm.rp2xy_all()
     fit_results = []
@@ -94,7 +107,7 @@ def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500, xycoord=
             if xycoord == 2: # fit in xy
                 vm.rp2xy_all()
             fit_result = config.fit(
-                batch=65000, method=method, maxiter=maxiter
+                datas=all_data, batch=65000, method=method, maxiter=maxiter
             )
             vm.std_polar_all()
         except KeyboardInterrupt:
@@ -138,7 +151,6 @@ def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500, xycoord=
     return fit_result
 
 from frac_table import frac_table
-from tf_pwa.data import data_cut
 res_curvestyle = {"D0_2300":"lime", "D0_2900":"y"}
 def write_some_results(config, fit_result, save_root=False):
     # plot partial wave distribution
@@ -181,17 +193,17 @@ def write_some_results_combine(config, fit_result, save_root=False):
             res = ["D1_2010","D2_2460","D1_2600",["NR_DPi0","D0_2400m"],"X0"]
         elif i is 1:
             res = ["D1_2007","D2_2460","D1_2600",["NR_DPi0","D0_2400o"],"X0"]'''
-        c.plot_partial_wave(
-            fit_result, prefix="figure/", plot_pull=True, save_root=save_root, smooth=False, save_pdf=True, res=res, res_curvestyle=res_curvestyle
-        )
-        '''cut_string = "(m>2.7)"
-        data, phsp, bg, _ = c.get_all_data()
-        data = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in data]
-        phsp = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in phsp]
-        bg = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in bg]
-        #bg = [None, None]
-        c.plot_partial_wave(fit_result, prefix="figure/", plot_pull=True, smooth=False, data=data, phsp=phsp, bg=bg, save_pdf=True)
-        '''
+        if not cut_string:
+            c.plot_partial_wave(
+                fit_result, prefix="figure/", plot_pull=True, save_root=save_root, smooth=False, save_pdf=True, res=res, res_curvestyle=res_curvestyle
+            )
+        else:
+            data, phsp, bg, _ = c.get_all_data()
+            data = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in data]
+            phsp = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in phsp]
+            bg = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in bg] # [None, None]
+            c.plot_partial_wave(fit_result, prefix="figure/", plot_pull=True, smooth=False, data=data, phsp=phsp, bg=bg, save_pdf=True)
+        
     fitfrac = []; errfrac = []; 
     for it, config_i in enumerate(config.configs):
         print("########## fit fractions {}:".format(it))
