@@ -64,7 +64,8 @@ def load_config(config_file="config.yml", total_same=False):
     return MultiConfig(config_files, total_same=total_same)
 
 
-cut_string = "" #"(m<2.7)"
+cut_string = ""#"(m<2.7)|(m>3.1)"
+cut_varidx = {"m": ("particle", "(D, Pi)", "m")}
 def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500, xycoord=0):
     """
     simple fit script
@@ -77,11 +78,11 @@ def fit(config, vm, init_params="", method="BFGS", loop=1, maxiter=500, xycoord=
         cut_datas1 = []; cut_datas2 = []
         for data in datas1:
             if data[0] is not None:
-                data = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in data]
+                data = [data_cut(i, cut_string, cut_varidx) for i in data]
             cut_datas1.append(data)
         for data in datas2:
             if data[0] is not None:
-                data = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in data]
+                data = [data_cut(i, cut_string, cut_varidx) for i in data]
             cut_datas2.append(data)
         all_data = [cut_datas1, cut_datas2]
         
@@ -199,9 +200,9 @@ def write_some_results_combine(config, fit_result, save_root=False):
             )
         else:
             data, phsp, bg, _ = c.get_all_data()
-            data = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in data]
-            phsp = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in phsp]
-            bg = [data_cut(i, cut_string, {"m": ("particle", "(D, Pi)", "m")}) for i in bg] # [None, None]
+            data = [data_cut(i, cut_string, cut_varidx) for i in data]
+            phsp = [data_cut(i, cut_string, cut_varidx) for i in phsp]
+            bg = [data_cut(i, cut_string, cut_varidx) for i in bg] # [None, None]
             c.plot_partial_wave(fit_result, prefix="figure/", plot_pull=True, smooth=False, data=data, phsp=phsp, bg=bg, save_pdf=True)
         
     fitfrac = []; errfrac = []; 
