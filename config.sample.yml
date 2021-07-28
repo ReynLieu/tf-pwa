@@ -167,7 +167,7 @@ data:
     phsp_noeff: ["../dataDDspi/dat/B0toD0Dspi_MC_Noeff.dat"]
     cached_amp: True
     bg: [["../dataDDspi/dat_cfit/B0toD0Dspi_Run1_BKGsample.dat"], ["../dataDDspi/dat_cfit/B0toD0Dspi_Run2_BKGsample.dat"],["../dataDDspi/dat_cfit/B0toD0_K3piDspi_Run1_BKGsample.dat"], ["../dataDDspi/dat_cfit/B0toD0_K3piDspi_Run2_BKGsample.dat"]]
-    bg_weight: [0.03347457158062799, 0.03844994561878952, 0.029512864197530863, 0.02932771864310148] # note the sample data has changed. need to scp from lxplus.cern.ch
+    bg_weight: [0.034277231607629424, 0.03806482722232159, 0.0287584, 0.028770032718120803] # note the sample data has changed. need to scp from lxplus.cern.ch
 
 
 
@@ -347,4 +347,4 @@ data:
     phsp_noeff: ["../dataDDspi/dat/BptoDmDspi_MC_Noeff.dat"]
     cached_amp: True
     bg: [["../dataDDspi/dat_cfit/BptoDmDspi_Run1_BKGsample.dat"], ["../dataDDspi/dat_cfit/BptoDmDspi_Run2_BKGsample.dat"]]
-    bg_weight: [0.030754990701754387, 0.03845343037016265] # note the sample data has changed. need to scp from lxplus.cern.ch
+    bg_weight: [0.029712448644067798, 0.03726220997282608] # note the sample data has changed. need to scp from lxplus.cern.ch
